@@ -24,7 +24,7 @@ When I write `alt` attributes, I always begin with the kind of image: *Photo of.
 
 ## HTML Structure Around Images
 
-Another problem with images generally is somehow grouping them. It’s not uncommon to see markup something along the lines of:
+Another problem with images generally is somehow structurally presenting them alongside other HTML content: the running text of an article, for example, or even with a caption or other information. It’s not uncommon to see markup something along the lines of:
 
     <div class="photo">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -39,9 +39,9 @@ Not only does that provide a styling hook in CSS (`div.photo` or just `.photo`),
       </p>
     </div>
 
-The limitation to that markup is that `<div>` is a generic element, indicating only a division; adding a class of `photos` makes sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” There is also no clear, structural indication that the paragraph inside of the `<div>` functions as a caption.
+The limitation to that markup is that `<div>` is a generic element, indicating only a division; adding a class of `photos` makes sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” There is also no clear, semantic indication that the paragraph inside of the `<div>` should be treated as a caption, other than its proximity.
 
-HTML5 introduced [the `<figure>` element](http://www.w3.org/TR/html/grouping-content.html#the-figure-element), which is "used to annotate illustrations, diagrams, photos, code listings, etc.” `<figure>` also comes with a semantic child element, called `<figcaption>`. Here I’ve rewritten the example above with these new semantic elements:
+HTML5 introduced a number of [new semantic elements to replace generic `<div>` and `<span>` elements](http://html5forwebdesigners.com/semantics/index.html). Images and other media can be marked up with [the `<figure>` element](http://www.w3.org/TR/html/grouping-content.html#the-figure-element), which is "used to annotate illustrations, diagrams, photos, code listings, etc.” `<figure>` has a semantic child element, called `<figcaption>`. Here I’ve rewritten the example above with the new semantic elements:
 
     <figure class="photo">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -50,18 +50,11 @@ HTML5 introduced [the `<figure>` element](http://www.w3.org/TR/html/grouping-con
       </figcaption>
     </figure>
 
-Unlike `<div>`, `<figure>` has a clear and well understood meaning to browsers and assistive devices. The location of `<figcaption>`, as a child of the `<figure>` element, provides a strong, structural association to browsers and assistive devices that the caption is specifically for the media inside of the `<figure>` element: the `<img>` tag, in this case. And unlike the `alt` attribute, `<figcaption>`, as palpable content, is discoverable to all users.
-
-However, older browsers, particularly Internet Explorer prior to version 9, do not understand
-
-CSS should include this:
-
-    /* CSS */
-    figure,figcaption { display: block; }
+Unlike `<div>`, `<figure>` has a clear and well understood meaning to browsers and assistive devices. The location of `<figcaption>`, as a child of the `<figure>` element, provides a semantic association to browsers and assistive devices that the caption is specifically for the media inside of the `<figure>` element: the `<img>` tag, in this case. And unlike the content tucked inside the `alt` attribute, the palpable content of `<figcaption>` is discoverable by all users.
 
 ## ARIA Attributes
 
-But it’s possible to create even stronger structural associations between `<figure>` and `<caption>` through the user of Accessible Rich Internet Application (ARIA) attributes.
+But it’s possible to create even stronger structural associations between `<figure>` and `<figcaption>`, as well as other content elsewhere on the page, through the user of Accessible Rich Internet Application (ARIA) attributes.
 
 The first ARIA attribute is `aria-labelledby` (note the British spelling of *labelled*). The value of that attribute must be a unique ID on some other element. In this case, `<figcaption>` serves as the label, so I’ve added `id="flower-caption"` to it, and then put `flower-caption` as the value of `aria-labelledby`:
 
@@ -82,6 +75,15 @@ To make that information discoverable to all users, I’ve added a simple *Full 
         Flowers growing in a box just outside my office window. <a href="#content">Full description.</a>
       </figcaption>
     </figure>
+
+## Progressively Styling for Semantics
+
+Older browsers, particularly Internet Explorer prior to version 9, do not understand how to style newer elements like `<figure>`, so
+
+CSS should include this:
+
+    /* CSS */
+    figure,figcaption { display: block; }
 
 I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone clicks the *Full description* link. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user wondering why I’d included an apparently non-functional link in the figure caption:
 
