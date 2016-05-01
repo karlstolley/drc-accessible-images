@@ -54,9 +54,11 @@ Unlike `<div>`, `<figure>` has a clear and well understood meaning to browsers a
 
 ## ARIA Attributes
 
-But it’s possible to create even stronger structural associations between `<figure>` and `<figcaption>`, as well as other content elsewhere on the page, through the user of Accessible Rich Internet Application (ARIA) attributes.
+But it’s possible to create even stronger accessible structural associations between `<figure>` and `<figcaption>`, as well as point to related content elsewhere on the page, through the use of [Accessible Rich Internet Application (ARIA) attributes](http://www.w3.org/TR/wai-aria/states_and_properties).
 
-The first ARIA attribute is `aria-labelledby` (note the British spelling of *labelled*). The value of that attribute must be a unique ID on some other element. In this case, `<figcaption>` serves as the label, so I’ve added `id="flower-caption"` to it, and then put `flower-caption` as the value of `aria-labelledby`:
+MORE ABOUT WTF THESE ARE, DEVELOPMENT OF [ARIA IN HTML SPEC](http://www.w3.org/TR/html-aria/). NOT PALPABLE CONTENT, BUT POINT TO CONTENT THAT IS PALPABLE -> HANDLE IN DESIGN SECTION.
+
+The first ARIA attribute to enhance this example is [`aria-labelledby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby) (note the British English spelling of *labelled*). The value of that attribute must be a unique ID assigned to some other element. In this case, `<figcaption>` serves as the label, so I’ve added `id="flower-caption"` to it, and then written `flower-caption` as the value of `aria-labelledby`:
 
     <figure class="photo" aria-labelledby="flower-caption">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -67,7 +69,7 @@ The first ARIA attribute is `aria-labelledby` (note the British spelling of *lab
 
 The WAI-ARIA spec notes that the “`aria-labelledby` attribute is similar to `aria-describedby` in that both reference other elements to calculate a text alternative, but a label should be concise, where a description is intended to provide more verbose information.”
 
-To make that information discoverable to all users, I’ve added a simple *Full description* link that points elsewhere on the page, using the `#`-style fragment identifier, which will scroll the browser to the content in question:
+To make that information discoverable to all users, I’ve added a simple *Full description* link that points elsewhere on the page, using [the `#`-style fragment identifier](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-id), which will scroll or otherwise point the browser to the unique ID of the content in question:
 
     <figure class="photo" aria-labelledby="flower-caption" aria-describedby="content">
       <img src="flowers.jpg" alt="Photo of flowers." />
