@@ -41,9 +41,9 @@ Not only does that provide a styling hook in CSS (`div.photo` or just `.photo`),
       </p>
     </div>
 
-The limitation to that markup is that `<div>` is a generic element, indicating only a division; adding a class of `photos` makes sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” There is also no clear, semantic indication that the paragraph inside of the `<div>` should be treated as a caption, other than its proximity.
+The limitation to that markup is that `<div>` is a generic element, indicating only a division; adding a class of `photos` makes sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” There is also no semantic indication that the paragraph inside of the `<div>` is a caption, other than its proximity in the source code. That’s not enough.
 
-HTML5 introduced a number of [new semantic elements to replace generic `<div>` and `<span>` elements](http://html5forwebdesigners.com/semantics/index.html). Images and other media can be marked up with [the `<figure>` element](http://www.w3.org/TR/html/grouping-content.html#the-figure-element), which is "used to annotate illustrations, diagrams, photos, code listings, etc.” `<figure>` has a semantic child element, called `<figcaption>`. Here I’ve rewritten the example above with the new semantic elements:
+HTML5 introduced a number of [new semantic elements to replace generics like `<div>` and `<span>`](http://html5forwebdesigners.com/semantics/index.html). The element most relevant to marking up images and other media is [`<figure>`](http://www.w3.org/TR/html/grouping-content.html#the-figure-element), which is "used to annotate illustrations, diagrams, photos, code listings, etc.” `<figure>` has a semantic child element, called `<figcaption>` (figure caption). Here is the example above rewritten using the new semantic elements:
 
     <figure class="photo">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -52,7 +52,7 @@ HTML5 introduced a number of [new semantic elements to replace generic `<div>` a
       </figcaption>
     </figure>
 
-Unlike `<div>`, `<figure>` has a clear and well understood meaning to browsers and assistive devices. The location of `<figcaption>`, as a child of the `<figure>` element, provides a semantic association to browsers and assistive devices that the caption is specifically for the media inside of the `<figure>` element: the `<img>` tag, in this case. And unlike the content tucked inside the `alt` attribute, the palpable content of `<figcaption>` is discoverable by all users.
+Unlike `<div>`, `<figure>` has a clear and well understood meaning to modern browsers and assistive devices. The location of `<figcaption>`, as a child of the `<figure>` element, provides a semantic association to browsers and assistive devices that the caption is specifically for the media inside of the `<figure>` element: the `<img>` tag, in this case. And unlike the content tucked inside the `alt` attribute, the palpable content of `<figcaption>` is discoverable by all users.
 
 ## ARIA Attributes
 
