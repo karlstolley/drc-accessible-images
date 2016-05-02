@@ -97,7 +97,7 @@ I’ve added the following CSS to highlight the descriptive content on the page,
 
 ## Accessible Images
 
-Now that the text content of the page has been strongly, accessibly associated with the image, I want to turn to the image itself. Prior to the original iPhone’s release in 2007, handling images on the web was a fairly straightforward thing. People were generally designing fixed-with layouts, usually at about 960 pixels wide, and creating images of a specific width to fit within those layouts. A pixel was a pixel, and that was that.
+Now that the text content of the page has been semantically, accessibly associated with the image, I want to turn to the image itself. Prior to the original iPhone’s release in 2007, handling images on the web was a fairly straightforward thing. People were generally designing fixed-with layouts, usually at about 960 pixels wide, and creating images of a specific width to fit within those layouts. The image’s dimensions were hard-coded into the HTML with `height` and `width` attributes, a pixel was a pixel, and that was that.
 
 Things got even more complicated with the release of the iPhone 4, which introduced what Apple called a “retina” display, which roughly doubled the number of pixels per inch that made up its screen. However, even though the number of pixels increased, the device itself behaved as though it were still 320 pixels wide. That was the dawn of the pixel-doubled image, which has now gone on to be pixel-tripled on certain devices. And far from behing a phone-only display feature, high-density displays are available all the way up to desktop sizes on 4K and, in the case of the 27” Retina iMac, 5K displays.
 
