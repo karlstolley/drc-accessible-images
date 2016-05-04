@@ -56,11 +56,9 @@ Unlike `<div>`, `<figure>` has a clear and well understood meaning to modern bro
 
 ## ARIA Attributes
 
-But it’s possible to create even stronger accessible structural associations between `<figure>` and `<figcaption>`, as well as point to related content elsewhere on the page, through the use of [Accessible Rich Internet Application (ARIA) attributes](http://www.w3.org/TR/wai-aria/states_and_properties).
+But it’s possible to enhance HTML5’s native structural associations between `<figure>` and `<figcaption>`, as well as point to related content elsewhere on the page, by including [Accessible Rich Internet Application (ARIA) attributes](http://www.w3.org/TR/wai-aria/states_and_properties). ARIA attributes are in active development by the W3C’s Web Accessibility Initiative group, the same group responsible for the Web Content Accessibility Guidelines mentioned above. There is also a specification in development for [ARIA in HTML](http://www.w3.org/TR/html-aria/), which when complete will clarify the use of ARIA alongside HTML’s native semantics. But there is no need to wait for that specification. ARIA can be used in HTML immediately.
 
-MORE ABOUT WTF THESE ARE, DEVELOPMENT OF [ARIA IN HTML SPEC](http://www.w3.org/TR/html-aria/). NOT PALPABLE CONTENT, BUT POINT TO CONTENT THAT IS PALPABLE -> HANDLE IN DESIGN SECTION.
-
-The first ARIA attribute to enhance this example is [`aria-labelledby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby) (note the British English spelling of *labelled*). The value of that attribute must be a unique ID assigned to some other element. In this case, `<figcaption>` serves as the label, so I’ve added `id="flower-caption"` to it, and then written `flower-caption` as the value of `aria-labelledby`:
+The first ARIA attribute to enhance the example code in this post is [`aria-labelledby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby) (note the British English spelling of *labelled*, with two Ls). The value of that attribute must be a unique ID assigned to some other element whose contents labels the image. In this case, the brief `<figcaption>` serves as the label, so I’ve added `id="flower-caption"` to it, and then written `flower-caption` as the value of `aria-labelledby` on the `<figure>` element:
 
     <figure class="photo" aria-labelledby="flower-caption">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -69,7 +67,7 @@ The first ARIA attribute to enhance this example is [`aria-labelledby`](http://w
       </figcaption>
     </figure>
 
-The WAI-ARIA spec notes that the “`aria-labelledby` attribute is similar to `aria-describedby` in that both reference other elements to calculate a text alternative, but a label should be concise, where a description is intended to provide more verbose information.”
+[The WAI-ARIA spec notes](http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby) that the “`aria-labelledby` attribute is similar to `aria-describedby` in that both reference other elements to calculate a text alternative, but a label should be concise, where a description is intended to provide more verbose information.” In many cases, a fuller description would appear in the running text of the page where the image has been included.
 
 To make that information discoverable to all users, I’ve added a simple *Full description* link that points elsewhere on the page, using [the `#`-style fragment identifier](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-id), which will scroll or otherwise point the browser to the unique ID of the content in question:
 
