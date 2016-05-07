@@ -80,17 +80,36 @@ To make that associated, descriptive information discoverable to all users, I’
     <!-- Elsewhere on the page: -->
     <p id="flower-description">
       A lush box of purple pansies, yellow marigolds, and white alyssum look striking in
-      this photo of my flower box ... <!-- and so on -->
+      this photo of my flower box... <!-- ...and so on -->
     </p>
 
-## Progressively Styling for Semantics
+Having put all of that ARIA-enhanced semantic HTML in place to make the page more accessible on a structural level, let’s look at how CSS can style these elements for sighted users.
 
-Older browsers, particularly Internet Explorer prior to version 9, do not understand how to style newer elements like `<figure>`, so
+## Foundational Styling for Newer Semantics
 
-CSS should include this:
+Older browsers do not understand how to style newer block elements like `<figure>`, so the page’s accompanying CSS should include this:
 
     /* CSS */
     figure,figcaption { display: block; }
+
+Additionally, older versions of Internet Explorer cannot apply CSS to elements unknown to Internet Explorer, so it’s further necessary to bring in JavaScript to create the missing elements:
+
+    /* JavaScript */
+    document.elementCreate("figure");
+    document.elementCreate("figcaption");
+
+A more fully-featured solution to handle older versions of IE 9 and earlier would be to include [HTML5 Shiv](https://github.com/aFarkas/html5shiv), either from a copy stored on your own web server or via [cdnjs](https://cdnjs.com/libraries/html5shiv/):
+
+    <!-- HTML -->
+    <head>
+      <!--
+      other <head> content omitted for brevity; <script> tag
+      is wrapped in conditional comments that only IE will see
+      -->
+      <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <![endif]-->
+    </head>
 
 I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone clicks the *Full description* link. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user wondering about the presence of an apparently non-functional link in the figure caption:
 
@@ -100,9 +119,11 @@ I’ve added the following CSS to highlight the descriptive content on the page,
       transition: background 1s;
     }
 
+The remaining CSS for styling images will be described below, and are available in full with the examples that accompany this post.
+
 ## Accessible Images
 
-Now that the text content of the page has been semantically, accessibly associated with the image, I want to turn to the accessibility of the image itself. Prior to the original iPhone’s release in 2007, handling images on the web was a fairly straightforward thing. People were generally designing fixed-with layouts, usually at about 960 pixels wide, and creating images of a specific width to fit within those layouts. That single image was referenced in HTML in the `<img>` tag’s `src` attribute. Oftentimes, the image’s dimensions were hard-coded into the HTML with `height` and `width` attributes. A pixel was a pixel, images all rendered pretty much the same size on every computer you could think of, and that was that.
+Now that the text content of the page has been semantically, accessibly associated with the image, I want to turn to the accessibility of the image itself. Prior to the original iPhone’s release in 2007, handling images on the web was fairly straightforward. People were generally designing fixed-with layouts, usually at about 960 pixels wide, and creating images of a specific width to fit within those layouts. That single image was referenced in HTML in the `<img>` tag’s `src` attribute. Oftentimes, the image’s dimensions were hard-coded into the HTML with `height` and `width` attributes. A pixel was a pixel, images all rendered pretty much the same size on every computer you could think of, and that was that.
 
 But in order to make the original iPhone work with the Web of 2007, Apple designed its Safari web browser to scale down pages to appear as though the phone were 980 pixels wide: comfortable enough to fit the entire contents of ~960-pixel-wide layouts that were then all the rage. Other web-enabled smartphones quickly followed in similar fashion. In order to display a web page at the original iPhone’s native resolution of 320 pixels wide in portrait orientation, and 480 in landscape, required web authors to include a [viewport meta element](https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/UsingtheViewport/UsingtheViewport.html)
 
