@@ -16,7 +16,7 @@ To understand why `alt` attributes alone are insufficient for accessible image p
 
 1. **Content**: HTML limits attribute values to plain text; *Photo of a cute puppy* in the example above. None of the semantic tags that make for more accessible, expressive content elsewhere in HTML can be used inside of an attribute, `alt` or otherwise. You can’t, for example, use within an attribute value an `<em>` tag for providing emphasis on a portion of your `alt` attribute’s text, such as `Photo of a <em>cute</em> puppy` (for an exceptionally cute puppy), nor can you write the `<a>` (anchor) tag to link to a fuller description of the image. [EXAMPLE]
 
-2. **Discoverability**: an `alt` attribute’s text is not [palpable content](http://www.w3.org/TR/html5/dom.html#palpable-content), the way the text of an HTML paragraph or heading element is: `<h1>This is Palpable Content</h1>`. Ironically, the value of the `alt` attribute is *inaccessible* for many people. Unless someone is using an assistive device, like a screen reader, or viewing the page under error conditions, such as when an image fails to load for whatever reason, the presence of `alt` text is impossible to detect without examining the source code. The contents of an `alt` attribute will not aid, as an example, someone who can read text on screen if it’s sized large enough, but who does not have the fidelity of vision to make out the finer features of a photograph, chart, map, illustration, or other visual material. Certain browsers may render the contents of the `alt` attribute when an image is hovered over, but that’s little help to people using touchscreen devices, which cannot detect a hover state of someone’s finger.
+2. **Discoverability**: an `alt` attribute’s text is not [palpable content](http://www.w3.org/TR/html5/dom.html#palpable-content), the way the text is inside HTML elements such as paragraphs or headings: `<h1>This is Palpable Content</h1>`. Ironically, the value of the `alt` attribute is *inaccessible* for many people. Unless someone is using an assistive device, like a screen reader, or viewing the page under error conditions, like when an image fails to load, the presence of `alt` text is impossible to detect without examining the source code. The contents of an `alt` attribute will not aid, as an example, someone who can read text on screen if it’s sized large enough, but who does not have the fidelity of vision to make out the finer features of a photograph, chart, map, illustration, or other visual material. Certain browsers may render the contents of the `alt` attribute when an image is hovered over, but that’s little help to people using touchscreen devices, which cannot detect a hover state of someone’s finger.
 
 3. **Length**: certain browsers render only the first 100 or so characters of an `alt` attribute, particularly in tool-tip text shown to users upon hovering their mouse pointers over images. In testing on the most recent version of Safari on OS X (9.1), I found that `alt` text will not be displayed in place of a broken image if the text runs longer than one line within the broken image’s dimensions as specified in HTML or CSS. Keeping `alt` text accessible means keeping it short. Of course, the shorter `alt` text is, the less descriptive it can be.
 
@@ -26,7 +26,7 @@ When I write `alt` attributes, I always begin with the kind of image: *Photo of.
 
 ## HTML Structure Around Images
 
-Another problem with images generally is somehow structurally presenting them alongside other HTML content: the running text of an article, for example, or even with a caption or other information. It’s not uncommon to see markup something along the lines of:
+A problem with images generally is somehow structurally presenting them alongside other HTML content: the running text of an article, for example, or even with a caption or other information directly related to the image. It’s not uncommon to see markup something along the lines of:
 
     <div class="photo">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -41,7 +41,7 @@ Not only does that provide a styling hook in CSS (`div.photo` or just `.photo`),
       </p>
     </div>
 
-The limitation to that markup is that `<div>` is a generic element, indicating only a division; adding a class of `photos` makes sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” There is also no semantic indication that the paragraph inside of the `<div>` is a caption, other than its proximity in the source code. That’s not enough.
+The limitation to that markup is that `<div>` is a generic element, indicating only a division; adding a class of `photos` makes sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” There is also no semantic indication that the paragraph inside of the `<div>` is a caption, other than its proximity in the source code. That’s not enough to make the caption’s contents fully accessible to all.
 
 HTML5 introduced a number of [new semantic elements to replace generics like `<div>` and `<span>`](http://html5forwebdesigners.com/semantics/index.html). The element most relevant to marking up images and other media is [`<figure>`](http://www.w3.org/TR/html/grouping-content.html#the-figure-element), which is "used to annotate illustrations, diagrams, photos, code listings, etc.” `<figure>` has a semantic child element, called `<figcaption>` (figure caption). Here is the example above rewritten using the new semantic elements:
 
@@ -56,9 +56,9 @@ Unlike `<div>`, `<figure>` has a clear and well understood meaning to modern bro
 
 ## ARIA Attributes
 
-But it’s possible to enhance HTML5’s native structural associations between `<figure>` and `<figcaption>`, as well as point to related content elsewhere on the page, by including [Accessible Rich Internet Application (ARIA) attributes](http://www.w3.org/TR/wai-aria/states_and_properties). ARIA attributes are in active development by the W3C’s Web Accessibility Initiative group, the same group responsible for the Web Content Accessibility Guidelines mentioned above. There is also a specification in development for [ARIA in HTML](http://www.w3.org/TR/html-aria/), which when complete will clarify the use of ARIA alongside HTML’s native semantics. But there is no need to wait for that specification. ARIA can be used in HTML immediately.
+It’s possible to enhance HTML5’s native structural associations between `<figure>` and `<figcaption>`, as well as point to related content elsewhere on the page, by including [Accessible Rich Internet Application (ARIA) attributes](http://www.w3.org/TR/wai-aria/states_and_properties). ARIA attributes are in active development by the W3C’s Web Accessibility Initiative group, the same group responsible for the Web Content Accessibility Guidelines mentioned above. There is also a specification in development for [ARIA in HTML](http://www.w3.org/TR/html-aria/), which when complete will clarify the use of ARIA alongside HTML’s native semantics. But there is no need to wait for that specification. ARIA can be used in HTML immediately.
 
-The first ARIA attribute to enhance the example code in this post is [`aria-labelledby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby) (note the British English spelling of *labelled*, with two Ls). The value of that attribute must be a unique ID assigned to some other element whose contents labels the image. In this case, the brief `<figcaption>` serves as the label, so I’ve added `id="flower-caption"` to it, and then written `flower-caption` as the value of `aria-labelledby` on the `<figure>` element:
+The first ARIA attribute to enhance the example code I’ve been writing so far is [`aria-labelledby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby) (note the British English spelling of *labelled*, with two Ls). The value of that attribute must be a unique identifier assigned using the `id` attribute on some other element whose contents labels the image. In this case, the brief caption serves as the label, so I’ve added `id="flower-caption"` to `<figcaption>`, and then written `flower-caption` as the value of `aria-labelledby` on the `<figure>` element:
 
     <figure class="photo" aria-labelledby="flower-caption">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -67,16 +67,21 @@ The first ARIA attribute to enhance the example code in this post is [`aria-labe
       </figcaption>
     </figure>
 
-[The WAI-ARIA spec notes](http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby) that the “`aria-labelledby` attribute is similar to `aria-describedby` in that both reference other elements to calculate a text alternative, but a label should be concise, where a description is intended to provide more verbose information.” In many cases, a fuller description would appear in the running text of the page where the image has been included.
+That’s looking really good. But there’s another attribute worth including: `aria-describedby`. [The WAI-ARIA spec notes](http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby) that the “`aria-labelledby` attribute is similar to `aria-describedby` in that both reference other elements to calculate a text alternative, but a label should be concise, where a description is intended to provide more verbose information.” In many cases, a fuller description would appear in the running text of the page where the image has been included.
 
-To make that information discoverable to all users, I’ve added a simple *Full description* link that points elsewhere on the page, using [the `#`-style fragment identifier](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-id), which will scroll or otherwise point the browser to the unique ID of the content in question:
+To make that associated, descriptive information discoverable to all users, I’ve added a simple *Full description* link that points elsewhere on the page, using [the `#`-style fragment identifier](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-id), which will scroll or otherwise point the browser to the unique ID of the element containing the image’s full content. Capable assistive devices can leverage the identifier in `aria-describedby` to the same effect:
 
-    <figure class="photo" aria-labelledby="flower-caption" aria-describedby="content">
+    <figure class="photo" aria-labelledby="flower-caption" aria-describedby="flower-description">
       <img src="flowers.jpg" alt="Photo of flowers." />
       <figcaption id="flower-caption">
         Flowers growing in a box just outside my office window. <a href="#content">Full description.</a>
       </figcaption>
     </figure>
+    <!-- Elsewhere on the page: -->
+    <p id="flower-description">
+      A lush box of purple pansies, yellow marigolds, and white alyssum look striking in
+      this photo of my flower box ... <!-- and so on -->
+    </p>
 
 ## Progressively Styling for Semantics
 
