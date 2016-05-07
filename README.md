@@ -87,7 +87,7 @@ CSS should include this:
     /* CSS */
     figure,figcaption { display: block; }
 
-I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone clicks the *Full description* link. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user wondering why I’d included an apparently non-functional link in the figure caption:
+I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone clicks the *Full description* link. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user wondering about the presence of an apparently non-functional link in the figure caption:
 
     /* CSS */
     #content:target {
@@ -119,4 +119,4 @@ HTML5 Spec: 4.7.1.1 Requirements for providing text to act as an alternative for
 WebVTT:
 https://w3c.github.io/webvtt/
 
-Yes, you should write `alt` attributes in your `<img>` tags. But no, you must not stop there, if your aim is an accessible presentation of images on the web. The richest expressions of web accessibility are those that enrich the experience of a page or site for all users, regardless of ability.
+Yes, you should write `alt` attributes in your `<img>` tags. But no, you must not stop there, if your aim is an accessible presentation of images on the web. The richest expressions of web accessibility are those that inclusively enrich the experience of a page or site for all users, regardless of ability.
