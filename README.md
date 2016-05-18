@@ -34,7 +34,7 @@ Images must somehow be structurally presented alongside other HTML content, such
       <img src="flowers.jpg" alt="Photo of flowers." />
     </div>
 
-Not only does that provide a styling hook in CSS (`div.photo` or just `.photo`) for adding borders and other design elements to the image, but it lends itself to including a caption of some sort, probably as a paragraph element:
+That pattern provides a styling hook in CSS (`div.photo` or just `.photo`) for adding borders and other design elements to the image, and it also lends itself to including a caption of some sort, probably as a paragraph element:
 
     <div class="photo">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -43,9 +43,9 @@ Not only does that provide a styling hook in CSS (`div.photo` or just `.photo`) 
       </p>
     </div>
 
-The problem with that markup is that `<div>` is a generic, non-semantic element. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” Adding `photo` on a `class` attribute will make sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. There is also no semantic indication that the paragraph inside of the `<div>` is a caption, other than its proximity in the source code. That’s not enough to make the caption’s contents fully accessible to all.
+The problem with that markup is that `<div>` is a generic, non-semantic element. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” Adding `photo` in a `class` attribute will make sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. Neither is there any semantic indication that the paragraph inside of the `<div>` is a caption. The caption’s proximity in the source code is not enough to make its contents and meaning fully accessible to all.
 
-HTML5 introduced a number of [new semantic elements as better alternatives](http://html5forwebdesigners.com/semantics/index.html) to generics like `<div>` and `<span>`. The element most relevant to marking up images and other media is [`<figure>`](http://www.w3.org/TR/html/grouping-content.html#the-figure-element), which is “used to annotate illustrations, diagrams, photos, code listings, etc.” `<figure>` should also include a semantic child element called `<figcaption>` (figure caption). Here is the example above rewritten using the new semantic elements in HTML5:
+HTML5 introduced a number of [new semantic elements as better alternatives](http://html5forwebdesigners.com/semantics/index.html) to generics like `<div>` and `<span>`. The new element for marking up images and other media is [`<figure>`](http://www.w3.org/TR/html/grouping-content.html#the-figure-element), which is “used to annotate illustrations, diagrams, photos, code listings, etc.” `<figure>` should also include a semantic child element called `<figcaption>` (figure caption). Here is the example above rewritten using the new semantic elements in HTML5:
 
     <figure class="photo">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -54,13 +54,13 @@ HTML5 introduced a number of [new semantic elements as better alternatives](http
       </figcaption>
     </figure>
 
-Unlike `<div>`, `<figure>` has a clear and well defined meaning in modern browsers and assistive devices. It’s semantic. The location of `<figcaption>`, as a child of the `<figure>` element, establishes a semantic association that informs browsers and assistive devices that the caption is specifically for the media inside of the `<figure>` element: the `<img>` tag, in this case. And unlike content tucked inside the `alt` attribute, the palpable content tagged by `<figcaption>` is presented to and therefore discoverable by all users.
+Unlike `<div>`, `<figure>` has a clear and well defined meaning in modern browsers and assistive devices. It’s semantic. The location of `<figcaption>`, as a child of the `<figure>` element, establishes a semantic association that informs browsers and assistive devices that the caption is specifically for the media inside of the `<figure>` element: the `<img>` tag, in this case. But unlike content tucked inside the `alt` attribute, the palpable content tagged by `<figcaption>` is presented to and therefore discoverable by all users.
 
 ## ARIA Attributes
 
-It’s possible to enhance HTML5’s native structural associations between `<figure>` and `<figcaption>`, as well as point to related content elsewhere on the page, by including [Accessible Rich Internet Applications (ARIA) attributes](http://www.w3.org/TR/wai-aria/states_and_properties). ARIA attributes are in active development by the W3C’s Web Accessibility Initiative, the same group responsible for the Web Content Accessibility Guidelines mentioned above. There is also a specification in development for [ARIA in HTML](http://www.w3.org/TR/html-aria/), which when complete will clarify the use of ARIA alongside HTML’s native semantics. But there is no need to wait for that specification. ARIA can be used in HTML immediately.
+[Accessible Rich Internet Applications (ARIA) attributes](http://www.w3.org/TR/wai-aria/states_and_properties) make it possible to enhance HTML5’s native structural associations between `<figure>` and `<figcaption>`. ARIA attributes are specifically designed to remove any ambiguity of the function or purpose of the components of a web page. They are in active development by the W3C’s Web Accessibility Initiative, the same group responsible for the Web Content Accessibility Guidelines mentioned above. There is also a specification in development for [ARIA in HTML](http://www.w3.org/TR/html-aria/), which when complete will clarify the use of ARIA alongside HTML’s native semantics. But there is no need to wait for that specification. ARIA can be used in HTML immediately.
 
-The first ARIA attribute to enhance the example code I’ve written so far is [`aria-labelledby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby). Note the British English spelling of *labelled*, with two Ls. The value of that attribute must be a unique identifier assigned using the `id` attribute on some other HTML tag whose content provides the equivalent of a label for the image. In this example, the brief caption serves as the label, so I’ve added `id="flower-caption"` to `<figcaption>`, and then written `flower-caption` as the value of `aria-labelledby` on the `<figure>` element:
+The first ARIA attribute to enhance the example code I’ve written so far is [`aria-labelledby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby). Note the British English spelling of *labelled*, with two Ls. The value of that attribute must be a unique identifier assigned using the `id` attribute on some other HTML tag whose content functions as a label for the image. In this example, the caption itself is an obvious label, so I’ve added `id="flower-caption"` to `<figcaption>` and set `flower-caption` as the value of `aria-labelledby` on the `<figure>` element:
 
     <figure class="photo" aria-labelledby="flower-caption">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -69,9 +69,9 @@ The first ARIA attribute to enhance the example code I’ve written so far is [`
       </figcaption>
     </figure>
 
-That’s helped clarify the role of `<figcaption>` and its relationship to `<figure>`. But there’s another ARIA attribute worth including: `aria-describedby`. [The WAI-ARIA spec notes](http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby) that the “`aria-labelledby` attribute is similar to `aria-describedby` in that both reference other elements to calculate a text alternative, but a label should be concise, where a description is intended to provide more verbose information.” It’s not hard to imagine that a fuller description of an image would appear in the running text of the page where the image has been presented.
+That’s helped clarify the role of `<figcaption>` and its relationship to `<figure>`. But there’s an even more useful ARIA attribute to include: `aria-describedby`. [The WAI-ARIA spec notes](http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby) that `aria-describedby` and `aria-labelledby` are similar “in that both reference other elements to calculate a text alternative, but a label should be concise, where a description is intended to provide more verbose information.”
 
-The challenge is to make a clear association between the `<figure>` element and the descriptive content elsewhere. To make that associated, descriptive information discoverable to all users, I’ve added a simple *Full description* link that points elsewhere on the page, using [the `#`-style fragment identifier](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-id), which will scroll or otherwise point the browser to the unique ID of the element containing the image’s full content. Capable assistive devices can leverage the identifier in `aria-describedby` to the same effect:
+It’s not hard to imagine that a fuller description of an image would naturally appear in the running text of the page where the image has been presented. The challenge is to make a clear association between the `<figure>` element and the descriptive content elsewhere, which is the exact purpose of `aria-describedby`. To make that associated, descriptive information discoverable to all users, including those with assistive technologies that have yet to support `aria-describedby`, I’ve added a simple *Full description* link that points elsewhere on the page, using [the `#`-style fragment identifier](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-id). When activated, that link will scroll or otherwise point the browser to the unique ID of the element containing the image’s full content. Capable assistive devices can leverage the identifier in `aria-describedby` to the same effect:
 
     <figure class="photo" aria-labelledby="flower-caption" aria-describedby="flower-description">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -85,18 +85,21 @@ The challenge is to make a clear association between the `<figure>` element and 
       this photo of my flower box... <!-- ...and so on -->
     </p>
 
-This is a very strong piece of markup. And note that it is entirely HTML: no special JavaScript is required to make all of this work in tandem to make for a more accessible page. Having put that ARIA-enhanced semantic HTML in place to make the page more accessible on a structural level, let’s look at how CSS can be used to style those elements for sighted users. There should also be some light JavaScript put in place to assist older, less capable browsers like Internet Explorer.
+This is a very strong piece of markup. And note that it is entirely HTML: no JavaScript is required to make all of this work in tandem to make for a more accessible page. It’s an instructive example as to the importance of careful treatment and ongoing study of HTML, even as it reveals the advancements beyond the humble, limited `alt` attribute.
 
 ## Foundational Styling for Older Browsers and Newer Semantics
 
-Older browsers do not understand how to style newer block elements like `<figure>`, so the page’s accompanying CSS must include this:
+Having put that ARIA-enhanced semantic HTML in place to make the image more accessible on a structural level, let’s look at how CSS can style those elements for sighted users. There should also be some light JavaScript put in place to assist users of older, less capable browsers like Internet Explorer.
+
+Not all browsers understand how to style newer block elements like `<figure>`, so the page’s accompanying CSS must include this:
 
     /* CSS */
-    figure,figcaption { display: block; }
+    figure,figcaption,img { display: block; }
 
-Additionally, older versions of Internet Explorer cannot apply CSS to elements it does not know about, so it’s further necessary to bring in JavaScript to [create the missing elements](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement) using `document.createElement`. However, [HTML5 Shiv](https://github.com/aFarkas/html5shiv) isa more fully-featured solution to support older versions of IE 9 and earlier. You can include it in your site’s files or from a copy hosted at [cdnjs](https://cdnjs.com/libraries/html5shiv/):
+That ensures that `figure` and `figcaption` display as blocks, separated vertically from other content. Because `img` defaults to displaying inline with other content, similar to bold or italic text, it also gets added to the stack of elements to display as blocks.
 
-    <!-- HTML -->
+Unfortunately, unlike older versions of other browsers, older versions of Internet Explorer will not apply CSS to new HTML elements without using JavaScript. It’s possible to [create the new HTML elements](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement) using JavaScript’s `document.createElement`. However, [HTML5 Shiv](https://github.com/aFarkas/html5shiv) is a more fully-featured solution for anyone needing to support Internet Explorer versions 9 and earlier. You can include HTML5 Shiv in your site’s files or, as in this example, reference the copy hosted by [cdnjs](https://cdnjs.com/libraries/html5shiv/):
+
     <head>
       <!--
         other <head> content omitted for brevity; <script> tag
@@ -109,7 +112,7 @@ Additionally, older versions of Internet Explorer cannot apply CSS to elements i
       <![endif]-->
     </head>
 
-I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone clicks the *Full description* link. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user wondering about the presence of an apparently non-functional link in the figure caption:
+I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone clicks the *Full description* link. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user puzzled by the presence of an apparently non-functional link in the figure caption:
 
     /* CSS */
     #content:target {
@@ -117,17 +120,17 @@ I’ve added the following CSS to highlight the descriptive content on the page,
       transition: background 1s;
     }
 
-The CSS `transition` property provides a subtle animation to fade in the background color, potentially giving users time to notice the change on the page as it happens. The remaining CSS for styling images will be described below, and are available in full with the examples that accompany this post.
+The CSS `transition` property provides a subtle, one-second animation to fade in the background color, potentially giving users time to notice the change on the page as it happens. The remaining CSS for styling images will be described below, and are available in full with the examples that accompany this post.
 
 ## Accessible Images
 
-It is essential to ensure that the text content of the page is semantically and accessibly associated with an image, using standard HTML features and enhancements like ARIA attributes. Once that has been accomplished, there still remains an opportunity to improve the accessibility of the image itself by delivering images that are optimized for any given screen size and page layout. That can be achieved by artfully writing two new HTML features, the `srcset` attribute and the `<picture>` tag.
+It is essential to ensure that the text content of the page is semantically and accessibly associated with an image, using standard HTML features enhanced by ARIA attributes. Once that has been accomplished, there still remains an opportunity to improve the accessibility of the image itself by delivering a version of the image that is optimized for display in a specific range of screen sizes and page layouts. That can be achieved by working with two new HTML features, the `srcset` attribute and the `<picture>` tag.
 
 ## Pixels and Bitmapped Images
 
-Prior to the iPhone’s initial release in 2007, the preparation and delivery of web images was simple. Web designers typically designed fixed-width page layouts, usually at about 960 pixels wide. They prepared images to be a specific height and width to fit within the fixed layout, loading each image file in the `<img>` tag’s `src` attribute, which requires a URL pointing to single image. To prevent changes in layout after the image loaded, the image’s dimensions were sometimes hard-coded on the `<img>` tag with `height` and `width` attributes. A pixel was a pixel, images all rendered on 96 pixel-/dot-per-inch monitors, and that was that.
+Prior to the iPhone’s initial release in 2007, the preparation and delivery of web images was simple. Web designers typically designed fixed-width page layouts, usually at about 960 pixels wide. They prepared image files of a specific height and width to fit within the fixed layout, referencing the location of each image file in a URL or path in the `<img>` tag’s `src` attribute. To prevent changes in layout after an image loaded, the image’s dimensions were sometimes hard-coded in `height` and `width` attributes on the `<img>` tag. Images all rendered on desk- or laptop screens with a pixel density of roughly 96 pixels per inch. A pixel was a pixel, and that was that.
 
-In order to render fixed-width website layouts on the original 320 × 480 iPhone screen, Apple designed its mobile Safari web browser to behave as though the phone were 980 pixels wide: enough to display the entire contents of 960-pixel-wide layouts. To zoom in on text or images to fill more of the native phone viewport, users needed to double-tap or pull-zoom on page elements. Other smartphones quickly followed Apple’s lead and rendered pages in a similar fashion. That meant a lot of overhead in terms of image data: phones with native resolutions of around 320 × 480 pixels were routinely loading images with three times as many pixels as their devices could actually display, devouring mobile data plans and degrading device performance in the process.
+But the iPhone changed that. In order to render fixed-width website layouts on the original 320 × 480 iPhone screen, Apple designed its mobile Safari web browser to behave as though the phone were 980 pixels wide: enough to display the entire, zoomed-out contents of 960-pixel-wide layouts. iPhone users needed to double-tap page elements or pull their fingers apart to zoom in on text or images to fill more of the native phone viewport. Other smartphones quickly followed Apple’s lead and rendered pages in a similar fashion. That meant a lot of overhead in terms of image data: phones with native resolutions of around 320 × 480 pixels were routinely loading images with three times as many pixels as their devices could actually display, devouring mobile data plans and degrading device performance in the process.
 
 In 2010, Ethan Marcotte gifted the web designing world with the term [responsive web design](http://alistapart.com/article/responsive-web-design), which united three techniques–fluid grids, flexible images, and CSS3 media queries–into an approach for designing the web across screens of all sizes. Responsive web design (RWD) enables web designers to produce a site from a single set of HTML and CSS files that will render beautifully on all screens, from the tiniest phone to a widescreen television set and everything in between.
 
