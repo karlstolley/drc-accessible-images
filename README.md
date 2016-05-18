@@ -85,7 +85,7 @@ It’s not hard to imagine that a fuller description of an image would naturally
       this photo of my flower box... <!-- ...and so on -->
     </p>
 
-This is a very strong piece of markup. And note that it is entirely HTML: no JavaScript is required to make all of this work in tandem to make for a more accessible page. It’s an instructive example as to the importance of careful treatment and ongoing study of HTML, even as it reveals the advancements beyond the humble, limited `alt` attribute.
+This is a very strong piece of markup. And note that it is entirely HTML: no fancy JavaScript or anything is required to make all of this work. It’s an instructive example as to the importance of careful treatment and ongoing study of HTML, even as it reveals advancements beyond the humble, limited `alt` attribute.
 
 ## Foundational Styling for Older Browsers and Newer Semantics
 
