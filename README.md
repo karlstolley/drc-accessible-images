@@ -43,7 +43,7 @@ Not only does that provide a styling hook in CSS (`div.photo` or just `.photo`) 
       </p>
     </div>
 
-The limitation to that markup is that `<div>` is a generic, non-semantic element. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” Adding `photo` on a `class` attribute will make sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. There is also no semantic indication that the paragraph inside of the `<div>` is a caption, other than its proximity in the source code. That’s not enough to make the caption’s contents fully accessible to all.
+The problem with that markup is that `<div>` is a generic, non-semantic element. In the frank words of [the HTML5 specification](https://www.w3.org/TR/html5/grouping-content.html#the-div-element), “the `div` element has no special meaning at all” and therefore is “an element of last resort.” Adding `photo` on a `class` attribute will make sense to human readers of the source code, but it has no special meaning to browsers or assistive devices. There is also no semantic indication that the paragraph inside of the `<div>` is a caption, other than its proximity in the source code. That’s not enough to make the caption’s contents fully accessible to all.
 
 HTML5 introduced a number of [new semantic elements as better alternatives](http://html5forwebdesigners.com/semantics/index.html) to generics like `<div>` and `<span>`. The element most relevant to marking up images and other media is [`<figure>`](http://www.w3.org/TR/html/grouping-content.html#the-figure-element), which is “used to annotate illustrations, diagrams, photos, code listings, etc.” `<figure>` should also include a semantic child element called `<figcaption>` (figure caption). Here is the example above rewritten using the new semantic elements in HTML5:
 
@@ -85,7 +85,7 @@ The challenge is to make a clear association between the `<figure>` element and 
       this photo of my flower box... <!-- ...and so on -->
     </p>
 
-Having put all of that ARIA-enhanced semantic HTML in place to make the page more accessible on a structural level, let’s look at how CSS can be used to style those elements for sighted users.
+This is a very strong piece of markup. And note that it is entirely HTML: no special JavaScript is required to make all of this work in tandem to make for a more accessible page. Having put that ARIA-enhanced semantic HTML in place to make the page more accessible on a structural level, let’s look at how CSS can be used to style those elements for sighted users. There should also be some light JavaScript put in place to assist older, less capable browsers like Internet Explorer.
 
 ## Foundational Styling for Older Browsers and Newer Semantics
 
@@ -94,14 +94,15 @@ Older browsers do not understand how to style newer block elements like `<figure
     /* CSS */
     figure,figcaption { display: block; }
 
-Additionally, older versions of Internet Explorer cannot apply CSS to elements unknown to Internet Explorer, so it’s further necessary to bring in JavaScript to [create the missing elements](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement) using `document.createElement`. However, a more fully-featured solution to handle older versions of IE 9 and earlier would be to include [HTML5 Shiv](https://github.com/aFarkas/html5shiv) from either a copy hosted on your own web server or via [cdnjs](https://cdnjs.com/libraries/html5shiv/):
+Additionally, older versions of Internet Explorer cannot apply CSS to elements it does not know about, so it’s further necessary to bring in JavaScript to [create the missing elements](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement) using `document.createElement`. However, [HTML5 Shiv](https://github.com/aFarkas/html5shiv) isa more fully-featured solution to support older versions of IE 9 and earlier. You can include it in your site’s files or from a copy hosted at [cdnjs](https://cdnjs.com/libraries/html5shiv/):
 
     <!-- HTML -->
     <head>
       <!--
-      other <head> content omitted for brevity; <script> tag
-      is wrapped in conditional comments that only IE 9 and
-      earlier will see
+        other <head> content omitted for brevity; <script> tag
+        is wrapped in conditional comments that only IE 9 and
+        earlier will see; consult
+        http://www.quirksmode.org/css/condcom.html
       -->
       <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -116,17 +117,52 @@ I’ve added the following CSS to highlight the descriptive content on the page,
       transition: background 1s;
     }
 
-The remaining CSS for styling images will be described below, and are available in full with the examples that accompany this post.
+The CSS `transition` property provides a subtle animation to fade in the background color, potentially giving users time to notice the change on the page as it happens. The remaining CSS for styling images will be described below, and are available in full with the examples that accompany this post.
 
 ## Accessible Images
 
-It is essential to ensure that the text content of the page is semantically and accessibly associated with an image, using standard HTML features and enhancements like ARIA attributes. Once that has been accomplished, there still remains an opportunity to improve the accessibility of the image itself by delivering images that are optimized for a given screen size and page layout. That can be achieved by artfully writing with two new HTML features, the `srcset` attribute and the `<picture>` tag.
+It is essential to ensure that the text content of the page is semantically and accessibly associated with an image, using standard HTML features and enhancements like ARIA attributes. Once that has been accomplished, there still remains an opportunity to improve the accessibility of the image itself by delivering images that are optimized for any given screen size and page layout. That can be achieved by artfully writing two new HTML features, the `srcset` attribute and the `<picture>` tag.
 
 ## Pixels and Bitmapped Images
 
 Prior to the iPhone’s initial release in 2007, the preparation and delivery of web images was simple. Web designers typically designed fixed-width page layouts, usually at about 960 pixels wide. They prepared images to be a specific height and width to fit within the fixed layout, loading each image file in the `<img>` tag’s `src` attribute, which requires a URL pointing to single image. To prevent changes in layout after the image loaded, the image’s dimensions were sometimes hard-coded on the `<img>` tag with `height` and `width` attributes. A pixel was a pixel, images all rendered on 96 pixel-/dot-per-inch monitors, and that was that.
 
 In order to render fixed-width website layouts on the original 320 × 480 iPhone screen, Apple designed its mobile Safari web browser to behave as though the phone were 980 pixels wide: enough to display the entire contents of 960-pixel-wide layouts. To zoom in on text or images to fill more of the native phone viewport, users needed to double-tap or pull-zoom on page elements. Other smartphones quickly followed Apple’s lead and rendered pages in a similar fashion. That meant a lot of overhead in terms of image data: phones with native resolutions of around 320 × 480 pixels were routinely loading images with three times as many pixels as their devices could actually display, devouring mobile data plans and degrading device performance in the process.
+
+In 2010, Ethan Marcotte gifted the web designing world with the term [responsive web design](http://alistapart.com/article/responsive-web-design), which united three techniques–fluid grids, flexible images, and CSS3 media queries–into an approach for designing the web across screens of all sizes. Responsive web design (RWD) enables web designers to produce a site from a single set of HTML and CSS files that will render beautifully on all screens, from the tiniest phone to a widescreen television set and everything in between.
+
+Fluid grids expressed in CSS as percentages can reflow text content effortlessly across screen and browser viewport sizes. Media queries provide the means to change up the percentage-widths of the grids at different screen sizes. For example, on a phone screen, a single column of text should probably be close to 100% of the viewport. But on even a modest-sized laptop, 100% of the viewport would make uncomfortably long lines of text for someone to read, so a two- or three-column layout might be preferable. For example:
+
+    /* CSS */
+    /*
+      Content area sized at 95% at mobile scales, outside
+      of any media query:
+    */
+    #content {
+      width: 95%;
+    }
+    /*
+      Query for viewport screens larger than 700px wide:
+    */
+    @media screen and (min-width: 700px) {
+      /*
+        if the screen is 700px or larger, size content area
+        to be 66%:
+      */
+      #content {
+        width: 66%;
+      }
+    }
+
+Media queries make it possible to target certain CSS at browsers only under certain conditions. In that example, `#content` is only sized at 66% if the browser viewport is 700 pixels wide or more. (For a more accessible query, it’s generally better to query for em units rather than pixels. In most browsers, 1em = 16px, so the query could be rewritten as `(min-width: 43.75em)`. That has the advantage of drawing layouts based on how large someone has zoomed the text, rather than the pixel-width of their device.)
+
+The `<img>` element’s `src` attribute was the Achilles heel of RWD. While media queries allow for exceptionally fine-grained control over the layout and flow of text content, the `src` attribute could point only to a single image. And that image had to look good on the massive television as well as the smallest phone screen. Most designers chose large images that looked good at the largest possible size, relying on CSS to resize image dimensions, thus making them “flexible”:
+
+    /* CSS */
+    img {
+      display: block;
+      max-width: 100%; /*Image only as big as its containing element*/
+    }
 
 The preparation of web images became even more complicated with the 2010 release of the iPhone 4, which introduced what Apple called a [Retina display](https://support.apple.com/en-us/HT202471). On Retina displays, or what I’ll refer to from here on as high-density displays (HDDs), the number of pixels per inch that make up the device’s screen increase from a traditional 96ppi to 192ppi and beyond. The kicker is that to prevent text, icons, and images from appearing microscopic, HDDs size on-screen elements *as though* the display were a traditional 96dpi display. And that means that a pixel is no longer a pixel.
 
