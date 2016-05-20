@@ -11,13 +11,54 @@ a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,c
     Example Styles
 */
 
+/* Base */
+html {
+  font-family: 'Helvetica Neue', serif;
+  font-size: 1.125em; /* 18px */
+  line-height: 1;
+}
+body {
+  line-height: 1.333em; /* 23.994 px */
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 1.333em;
+  line-height: 1;
+  padding: 1em .75em 1em .75em;
+}
+
+p {
+  padding: .333em 1em 1em 1em; /* 7.99px = .333em */
+}
+
+figure {
+  background: #DDD;
+}
+
+figcaption {
+  font-size: .75em; /* 13.503 px */
+  line-height: 1.777em;
+  padding: .592em 1.333em 1.333em 1.333em; /* 7.99px = .592em */
+}
+
+#logger {
+  font-family: Monaco, Courier, monospace;
+  font-size: .75em;
+  padding: .6667em;
+  position: absolute;
+  right: 0;
+  color: rgb(255,255,255);
+  background-color: rgba(0,0,0,.6);
+}
+
 /* HTML5 Media Elements */
 figure, figcaption, picture { display: block; }
 
 /* Responsive Images */
 img {
   display: block; /* Images display inline by default; display as blocks */
-  width: 100%; /* Size as large as the containing element*/
+  width: 100%; /* Size as large as the containing element */
 }
 
 #garden-photo-description:target {
@@ -25,13 +66,23 @@ img {
   transition: background 2s;
 }
 
-@media screen and (min-width: 550px) {
+@media screen and (min-width: 600px) {
   figure {
     width: 50%;
     position: absolute;
-    left: 50%;
+    left: 0%;
   }
-  section {
+  footer, section {
+    margin-left: 50%;
     width: 50%;
+  }
+}
+@media screen and (min-width: 1050px) {
+  figure {
+    width: 66%;
+  }
+  footer, section {
+    margin-left: 66%;
+    width: 33%;
   }
 }

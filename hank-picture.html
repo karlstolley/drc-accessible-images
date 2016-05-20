@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <title>Accessible Images</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no" />
+  <link rel="stylesheet" href="assets/css/screen.css" />
+  <!--[if lt IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="assets/js/picturefill.js"></script></head>
+<body>
+  <article>
+
+    <header>
+      <h1>Hank Is a Happy Dog</h1>
+    </header>
+
+    <figure id="garden-photo" aria-labelled-by="garden-photo-caption">
+      <picture>
+        <source srcset="assets/img/hank-original.jpg" media="(min-width: 1050px)" />
+        <source srcset="assets/img/hank-cropped.jpg" media="(min-width: 810px)" />
+        <source srcset="assets/img/hank-tall-cropped.jpg" media="(min-width: 600px)" />
+        <source srcset="assets/img/hank-cropped.jpg" media="(min-width: 200px)" />
+        <img src="assets/img/hank-cropped-sm.jpg" alt="Photo of Hank the dog." />
+      </picture>
+      <figcaption id="garden-photo-caption">
+        Hank enjoying himself in the flower garden on a hot day.
+        <a href="#garden-photo-description">Full description</a>.
+      </figcaption>
+    </figure>
+
+    <section>
+      <p>
+        Hank is the first dog I’ve ever owned. He was a rescue, thrown out of his original family’s
+        home at the age of four months for destroying a pair of eyeglasses. Hank was left to run the
+        streets and fend for himself for several weeks, before
+        <a href="http://www.cbbr.org">Chicagoland Bully Breed Rescue</a> picked him up and found him
+        his permanent home in Chicago.
+      </p>
+      <p id="garden-photo-description">
+        In the summertime, Hank loves to cool off in the garden’s damp dirt, which always ends up on
+        his tongue. He seems perfectly content to relax among the flowers and leafy plants. He’s not
+        allowed in there, but he knows how to use his cute face and happy, goofy demeanor to get
+        away with all kinds of things around the house. And he’s always willing to pose for
+        <a href="#garden-photo">a photo like this one</a>, especially if he’s caught doing something
+        he shouldn’t be.
+      </p>
+    </section>
+
+    <footer>
+      <p>Something....</p>
+    </footer>
+
+  </article>
+
+
+
+  <script src="assets/js/shoestring.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>
