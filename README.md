@@ -4,7 +4,7 @@ The `alt` attribute is the HTML feature most often associated with accessibility
 
 The attribute has endured in its association with accessibility, being well known even among people with an otherwise limited knowledge of HTML. Get into a group discussion about how to best achieve accessibility on the web and people will excitedly shout “Alt text!” or “Alt tags!”—although strictly speaking, `alt` is an attribute on the image tag, `<img>`. In the extreme, `alt` attributes are mistaken for image accessibility itself: *Include `alt` attributes, and your images are accessible. Exclude them, and they’re not.*
 
-In this post, I present two complementary methods for delivering accessible images on the Web. The first method attends to the longstanding accessibility problem that `alt` attributes only partly solve: presenting images with text-based descriptions and enhancements that serve all users. The second method improves the accessibility of images themselves through device- and layout-sensitive image delivery now native to HTML.
+Over a series of two posts, I’m going to present two complementary approaches to delivering accessible images on the Web. In this post, I’ll cover methods attending to the longstanding accessibility problem that `alt` attributes only partly solve: presenting images with text-based descriptions and enhancements that serve all users. The next post will focus on device- and layout-sensitive image delivery now native to HTML in order to address the overlooked problem of the accessibility of images themselves.
 
 ## Three Limitations to `alt` Attributes
 
