@@ -8,7 +8,27 @@
   <!--[if lt IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
   <![endif]-->
-  <script src="assets/js/picturefill.js"></script></head>
+  <script src="assets/js/picturefill.js"></script>
+  <script type="text/javascript">
+	/* cribbed from http://cloudfour.com/examples/img-currentsrc/ */
+	(function() {
+    var currentSrc, oldSrc, imgEl;
+    var showPicSrc = function() {
+      oldSrc     = currentSrc;
+      imgEl      = document.getElementById('hank-photo');
+      currentSrc = imgEl.currentSrc || imgEl.src;
+
+      if (typeof oldSrc === 'undefined' || oldSrc !== currentSrc) {
+        document.getElementById('logger').innerHTML = currentSrc.split('img/')[1];
+      }
+    };
+
+    // You may wish to debounce resize if you have performance concerns
+    window.addEventListener('resize', showPicSrc);
+    window.addEventListener('load', showPicSrc);
+  })(window);
+	</script>
+  </head>
 <body>
   <article>
 
@@ -17,12 +37,13 @@
     </header>
 
     <figure id="garden-photo" aria-labelled-by="garden-photo-caption">
+      <pre id="logger"></pre>
       <picture>
-        <source srcset="assets/img/hank-original.jpg" media="(min-width: 1050px)" />
-        <source srcset="assets/img/hank-cropped.jpg" media="(min-width: 810px)" />
-        <source srcset="assets/img/hank-tall-cropped.jpg" media="(min-width: 600px)" />
-        <source srcset="assets/img/hank-cropped.jpg" media="(min-width: 200px)" />
-        <img src="assets/img/hank-cropped-sm.jpg" alt="Photo of Hank the dog." />
+        <source srcset="assets/img/hank-3264-30.jpg 3264w, assets/img/hank-2000-30.jpg 2000w, assets/img/hank-1500-30.jpg 1500w, assets/img/hank-1200-30.jpg 1200w, assets/img/hank-700-60.jpg 700w" sizes="66vw" media="(min-width: 1050px)" />
+        <source srcset="assets/img/hank-cropped-600-60.jpg 1x, assets/img/hank-cropped-1200-30.jpg 2x" media="(min-width: 975px)" />
+        <source srcset="assets/img/hank-tall-cropped-1050-30.jpg 2x, assets/img/hank-tall-cropped-600-60.jpg 1x" media="(min-width: 600px)" />
+        <source srcset="assets/img/hank-cropped-600-60.jpg 600w, assets/img/hank-cropped-1200-30.jpg 1200w" />
+        <img id="hank-photo" src="assets/img/hank-cropped-300-60.jpg" alt="Photo of Hank the dog." />
       </picture>
       <figcaption id="garden-photo-caption">
         Hank enjoying himself in the flower garden on a hot day.
