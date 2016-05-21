@@ -1,3 +1,5 @@
+# Part I: Image Accessibility Beyond Alt Attributes
+
 The `alt` attribute is the HTML feature most often associated with accessibility. It’s been around since the HTML 2.0 specification ([RFC 1866](https://tools.ietf.org/html/rfc1866), finalized in 1995), [which noted](https://tools.ietf.org/html/rfc1866#section-5.10) that “user agents may process the value of the ALT attribute as an alternative to processing the image resource indicated by the SRC attribute.” In plain English, `alt` attributes were meant as fallback content for web browsers unable to display images, which not all early web browsers could. The World Wide Web Consortium  [formalized `alt` as an accessibility feature](http://www.w3.org/TR/WCAG10/#gl-provide-equivalents)   four years later, in May 1999’s [Web Content Accessibility Guidelines 1.0](http://www.w3.org/TR/WCAG10/]) specification.
 
 The attribute has endured in its association with accessibility, being well known even among people with an otherwise limited knowledge of HTML. Get into a group discussion about how to best achieve accessibility on the web and people will excitedly shout “Alt text!” or “Alt tags!”—although strictly speaking, `alt` is an attribute on the image tag, `<img>`. In the extreme, `alt` attributes are mistaken for image accessibility itself: *Include `alt` attributes, and your images are accessible. Exclude them, and they’re not.*
@@ -122,7 +124,7 @@ I’ve added the following CSS to highlight the descriptive content on the page,
 
 The CSS `transition` property provides a subtle, one-second animation to fade in the background color, potentially giving users time to notice the change on the page as it happens. The remaining CSS for styling images will be described below, and are available in full with the examples that accompany this post.
 
-## Accessible Images
+# Part II: Better Accessible Images
 
 It is essential to ensure that the text content of the page is semantically and accessibly associated with an image, using standard HTML features enhanced by ARIA attributes. Once that has been accomplished, there still remains an opportunity to improve the accessibility of the image itself by delivering a version of the image that is optimized for display in a specific range of screen sizes and page layouts. That can be achieved by working with two new HTML features, the `srcset` attribute and the `<picture>` tag.
 
