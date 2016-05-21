@@ -79,10 +79,10 @@ img {
 }
 @media screen and (min-width: 1050px) {
   figure {
-    width: 66%;
+    width: 66.6667%;
   }
   footer, section {
-    margin-left: 66%;
-    width: 33%;
+    margin-left: 66.6667%;
+    width: 33.3333%;
   }
 }
