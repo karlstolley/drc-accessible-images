@@ -73,7 +73,7 @@ The first ARIA attribute to enhance the example code I’ve written so far is [`
 
 That’s helped clarify the role of `<figcaption>` and its relationship to `<figure>`. But there’s an even more useful ARIA attribute to include: `aria-describedby`. [The WAI-ARIA spec notes](http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby) that `aria-describedby` and `aria-labelledby` are similar “in that both reference other elements to calculate a text alternative, but a label should be concise, where a description is intended to provide more verbose information.”
 
-It’s not hard to imagine that a fuller description of an image would naturally appear in the running text of the page where the image has been presented. The challenge is to make a clear association between the `<figure>` element and the descriptive content elsewhere, which is the exact purpose of `aria-describedby`. To make that associated, descriptive information discoverable to all users, including those with assistive technologies that have yet to support `aria-describedby`, I’ve added a simple *Full description* link that points elsewhere on the page, using [the `#`-style fragment identifier](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-id). When activated, that link will scroll or otherwise point the browser to the unique ID of the element containing the image’s full content. Capable assistive devices can leverage the identifier in `aria-describedby` to the same effect:
+It’s not hard to imagine that a fuller description of an image would naturally appear in the running text of the page where the image has been presented. The challenge is to make a clear association between the `<figure>` element containing the image and the image’s descriptive content elsewhere. But that is the exact purpose of `aria-describedby`. To make that associated, descriptive information discoverable to all users, including those with assistive technologies that have yet to support `aria-describedby`, I’ve added a simple *Full description* link that points to the descriptive content on the page, using [the `#`-style fragment identifier](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-id). When activated, that link will scroll or otherwise point the browser to the unique ID of the element containing the image’s full content. Capable assistive devices can leverage the identifier in `aria-describedby` to the same effect:
 
     <figure class="photo" aria-labelledby="flower-caption" aria-describedby="flower-description">
       <img src="flowers.jpg" alt="Photo of flowers." />
@@ -87,24 +87,24 @@ It’s not hard to imagine that a fuller description of an image would naturally
       this photo of my flower box... <!-- ...and so on -->
     </p>
 
-This is a very strong piece of markup. And note that it is entirely HTML: no fancy JavaScript or anything is required to make all of this work. It’s an instructive example as to the importance of careful treatment and ongoing study of HTML, even as it reveals advancements beyond the humble, limited `alt` attribute.
+This has become a very strong piece of markup compared to the bare-bones `<div>` markup above. And note that it is entirely HTML: no fancy JavaScript or anything is required to make all of this work. It’s an instructive example of the importance of careful treatment and ongoing study of HTML, even as it reveals advancements beyond the humble, limited `alt` attribute.
 
 ## Foundational Styling for Older Browsers and Newer Semantics
 
 Having put that ARIA-enhanced semantic HTML in place to make the image more accessible on a structural level, let’s look at how CSS can style those elements for sighted users. There should also be some light JavaScript put in place to assist users of older, less capable browsers like Internet Explorer.
 
-Not all browsers understand how to style newer block elements like `<figure>`, so the page’s accompanying CSS must include this:
+First, not all browsers understand how to style newer block elements like `<figure>`, so the page’s accompanying CSS must include this:
 
     /* CSS */
     figure,figcaption,img { display: block; }
 
 That ensures that `figure` and `figcaption` display as blocks, separated vertically from other content. Because `img` defaults to displaying inline with other content, similar to bold or italic text, it also gets added to the stack of elements to display as blocks.
 
-Unfortunately, unlike older versions of other browsers, older versions of Internet Explorer will not apply CSS to new HTML elements without using JavaScript. It’s possible to [create the new HTML elements](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement) using JavaScript’s `document.createElement`. However, [HTML5 Shiv](https://github.com/aFarkas/html5shiv) is a more fully-featured solution for anyone needing to support Internet Explorer versions 9 and earlier. You can include HTML5 Shiv in your site’s files or, as in this example, reference the copy hosted by [cdnjs](https://cdnjs.com/libraries/html5shiv/):
+Unfortunately, unlike older versions of other browsers, older versions of Internet Explorer will not apply CSS to new HTML elements without the assistance of JavaScript. It’s possible to [create the new HTML elements](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement) using JavaScript’s `document.createElement` method (e.g., `document.create('figure')`). However, [HTML5 Shiv](https://github.com/aFarkas/html5shiv) is a more fully-featured solution for anyone needing to support Internet Explorer versions 9 and earlier. You can include HTML5 Shiv in your site’s files or, as in this example, reference the copy hosted by [cdnjs](https://cdnjs.com/libraries/html5shiv/):
 
     <head>
       <!--
-        other <head> content omitted for brevity; <script> tag
+        Other <head> markup omitted for brevity; <script> tag
         is wrapped in conditional comments that only IE 9 and
         earlier will see; consult
         http://www.quirksmode.org/css/condcom.html
@@ -114,7 +114,7 @@ Unfortunately, unlike older versions of other browsers, older versions of Intern
       <![endif]-->
     </head>
 
-I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone clicks the *Full description* link. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user puzzled by the presence of an apparently non-functional link in the figure caption:
+I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone clicks the *Full description* link pointing to `#content`. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user puzzled by the presence of an apparently non-functional link in the figure caption:
 
     /* CSS */
     #content:target {
@@ -122,7 +122,17 @@ I’ve added the following CSS to highlight the descriptive content on the page,
       transition: background 1s;
     }
 
-The CSS `transition` property provides a subtle, one-second animation to fade in the background color, potentially giving users time to notice the change on the page as it happens. The remaining CSS for styling images will be described below, and are available in full with the examples that accompany this post.
+The CSS `transition` property provides a subtle, one-second animation to fade in the background color, potentially giving users time to notice the change on the page as it happens.
+
+
+
+
+The remaining CSS for styling images will be described below, and are available in full with the examples that accompany this post.
+
+
+
+
+
 
 # Part II: Better Accessible Images
 
