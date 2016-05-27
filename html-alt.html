@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
-  <title>Alt Text on Broken Images</title>
+  <title>HTML in Alt Text on Broken Images</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no" />
   <link rel="stylesheet" href="assets/css/screen.css" />
@@ -9,7 +9,7 @@
 <body>
 
   <div class="photo">
-    <img width="200" src="does-not-exist.jpg" alt="This image does not exist. In many browsers, that means that the text in the alt attribute should be displayed instead." />
+    <img width="200" src="does-not-exist.jpg" alt="This image does not exist. And <em>no</em> HTML tags in the `alt` attribute will be <a href='http://example.com/'>rendered</a>. Raw source will be shown instead." />
   </div>
 
 </body>
