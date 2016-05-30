@@ -1,6 +1,6 @@
 # Part II: Better Accessible Images
 
-It is essential to ensure that the text content of the page is semantically and accessibly associated with an image, using standard HTML features enhanced by ARIA attributes. Once that has been accomplished, there still remains an opportunity to improve the accessibility of the image itself by delivering a version of the image that is optimized for display in a specific range of screen sizes and page layouts. That can be achieved by working with two new HTML features, the `srcset` attribute and the `<picture>` tag.
+Text-based page content semantically and accessibly associated with an image forms the foundation of image accessibility on the web. Standard HTML features enhanced by ARIA attributes. Once that has been accomplished, there still remains an opportunity to improve the accessibility of the image itself by delivering a version of the image that is optimized for display within a specific range of screen sizes and page layouts. That can be achieved by working with two new HTML features, the `srcset` attribute and the `<picture>` tag.
 
 ## Pixels and Bitmapped Images
 
