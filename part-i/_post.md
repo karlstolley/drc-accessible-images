@@ -114,7 +114,7 @@ Unfortunately, unlike past versions of other browsers, older versions of Interne
       <![endif]-->
     </head>
 
-I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone clicks the *Full description* link pointing to `#content`. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user puzzled by the presence of an apparently non-functional link in the figure caption:
+I’ve added the following CSS to highlight the descriptive content on the page, using the `:target` pseudoclass that will be applied when someone activates the *Full description* link pointing to `#content`. This little enhancement will be especially useful in cases where a layout would not require scrolling, and therefore leave a user puzzled by the presence of an apparently non-functional link in the figure caption:
 
     /* CSS */
     #content:target {
