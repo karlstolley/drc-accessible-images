@@ -14,7 +14,7 @@ Apple’s release of the iPhone in 2007 was also the birth of a viable mobile we
 
 [TRANSITION FROM AS-IS TO MOBILE/RESPONSIVE DESIGN]
 
-In 2010, Ethan Marcotte gifted the web designing world with the term [responsive web design](http://alistapart.com/article/responsive-web-design), which united three techniques–fluid grids, flexible images, and CSS3 media queries–into an approach for designing the web across screens of all sizes. Responsive web design (RWD) enables web designers to produce a site from a single set of HTML and CSS files that will render beautifully on all screens, from the tiniest phone to a widescreen television set and everything in between.
+In 2010, Ethan Marcotte introduced the concept of [responsive web design](http://alistapart.com/article/responsive-web-design), which united three techniques–fluid grids, flexible images, and CSS3 media queries–into an approach for designing the web across screens of all sizes. Responsive web design (RWD) enables web designers to produce a site from a single set of HTML and CSS files that will render beautifully on all screens, from the tiniest phone to a widescreen television set and everything in between.
 
 Fluid grids expressed in CSS as percentages enable text content to reflow effortlessly across screen and browser viewport sizes. Media queries provide the means to change up the percentage-widths of the grids at different screen sizes. For example, on a phone screen, a single column of text should probably be close to 100% of the viewport. But on even a modest-sized laptop, 100% of the viewport would make uncomfortably long lines of text for someone to read, so a two- or three-column layout might be preferable. For example:
 
