@@ -18,30 +18,28 @@ In 2010, Ethan Marcotte introduced the concept of [responsive web design](http:/
 
 Fluid grids expressed in CSS as percentages enable text content to reflow effortlessly across screen and browser viewport sizes. Media queries provide the means to change up the percentage-widths of the grids at different screen sizes. For example, on a phone screen, a single column of text should probably be close to 100% of the viewport. But on even a modest-sized laptop, 100% of the viewport would make uncomfortably long lines of text for someone to read, so a two- or three-column layout might be preferable. For example:
 
-```css
-/* CSS */
-/*
-  Content area sized at 95% at mobile scales, outside
-  of any media query:
-*/
-#content {
-  width: 95%;
-  margin: 0 auto; /* Visually center #content area */
-}
-/*
-  Query for viewport screens larger than 700px wide:
-*/
-@media screen and (min-width: 700px) {
-  /*
-    if the screen is 700px or larger, size content area
-    to be 66.667%:
-  */
-  #content {
-    width: 66.667%;
-    margin: 0 11.111% 0 22.222%; /* Left offset for #content area */
-  }
-}
-```
+    /* CSS */
+    /*
+      Content area sized at 95% at mobile scales, outside
+      of any media query:
+    */
+    #content {
+      width: 95%;
+      margin: 0 auto; /* Visually center #content area */
+    }
+    /*
+      Query for viewport screens larger than 700px wide:
+    */
+    @media screen and (min-width: 700px) {
+      /*
+        if the screen is 700px or larger, size content area
+        to be 66.667%:
+      */
+      #content {
+        width: 66.667%;
+        margin: 0 11.111% 0 22.222%; /* Left offset for #content area */
+      }
+    }
 
 Media queries apply the CSS rules they contain only under certain conditions. In that example, `#content` is only sized at 66.667% if the browser viewport is 700 pixels wide or more. For a more accessible query, it’s generally better to query for em units rather than pixels. In most browsers, 1em = 16px, so the query could be rewritten as `(min-width: 43.75em)`. That has the advantage of drawing layouts based on how large someone has zoomed the text, an accessibility preference of the user, rather than the arbitrary pixel-width of their device.
 
