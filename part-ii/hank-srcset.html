@@ -9,25 +9,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
   <![endif]-->
   <script src="assets/js/picturefill.js"></script>
-	<script type="text/javascript">
-	/* cribbed from http://cloudfour.com/examples/img-currentsrc/ */
-	(function() {
-    var currentSrc, oldSrc, imgEl;
-    var showPicSrc = function() {
-      oldSrc     = currentSrc;
-      imgEl      = document.getElementById('hank-photo');
-      currentSrc = imgEl.currentSrc || imgEl.src;
-
-      if (typeof oldSrc === 'undefined' || oldSrc !== currentSrc) {
-        document.getElementById('logger').innerHTML = currentSrc.split('img/')[1];
-      }
-    };
-
-    // You may wish to debounce resize if you have performance concerns
-    window.addEventListener('resize', showPicSrc);
-    window.addEventListener('load', showPicSrc);
-  })(window);
-	</script>
 </head>
 <body>
   <article>
@@ -37,7 +18,6 @@
     </header>
 
     <figure class="photo" id="garden-photo" aria-labelled-by="garden-photo-caption">
-      <pre id="logger"></pre>
       <img id="hank-photo" srcset="assets/img/hank-3264-30.jpg 3264w, assets/img/hank-2000-30.jpg 2000w, assets/img/hank-1500-30.jpg 1500w, assets/img/hank-1200-30.jpg 1200w, assets/img/hank-750-60.jpg 750w, assets/img/hank-600-60.jpg 600w, assets/img/hank-300-80.jpg 300w"
       sizes="(min-width: 1050px) 66vw, (min-width: 600px) 50vw, 100vw" src="assets/img/hank-300-80.jpg" alt="Photo of Hank the dog." />
       <figcaption id="garden-photo-caption">
