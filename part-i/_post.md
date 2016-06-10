@@ -16,11 +16,11 @@ In the terminology of HTML, `alt` and `src` (source) are *attributes*. The quote
 
 To understand why `alt` attributes alone are insufficient for accessible image presentation, consider their three limitations:
 
-1. **Content**: HTML limits attribute values to plain text, such as *Photo of a cute puppy* in the example above. None of the semantic tags that make for structurally expressive and accessible content elsewhere in HTML can be used inside of an attribute, `alt` or otherwise. You can’t, for example, use within an attribute value an `<em>` tag for providing emphasis on a portion of your `alt` attribute’s text, such as `Photo of <em>beautiful</em> flowers` for exceptionally beautiful flowers, nor can you write the `<a>` (anchor) tag to link to a fuller description of the image from within the `alt` text. [EXAMPLE]
+1. **Content**: HTML limits attribute values to plain text, such as *Photo of a cute puppy* in the example above. None of the semantic tags that make for structurally expressive and accessible content elsewhere in HTML can be used inside of an attribute, `alt` or otherwise. You can’t, for example, use within an attribute value an `<em>` tag for providing emphasis on a portion of your `alt` attribute’s text, such as `Photo of <em>beautiful</em> flowers` for exceptionally beautiful flowers, nor can you write the `<a>` (anchor) tag to link to a fuller description of the image from within the `alt` text, [as this example shows](https://karlstolley.github.io/drc-accessible-images/part-i/alt-with-html.html).
 
 2. **Discoverability**: an `alt` attribute’s value is not [palpable content](http://www.w3.org/TR/html5/dom.html#palpable-content), the way the text is between opening and closing HTML tags such as paragraphs or headings: `<h1>This is Palpable Content</h1>`. Ironically, that means the `alt` attribute’s content is *inaccessible* to many people. Unless someone is using an assistive device, like a screen reader, or viewing the page under error conditions, like when an image fails to load, the presence of `alt` text is impossible to detect without examining the source code. The contents of an `alt` attribute will not aid, for example, someone who can read text on screen if the text is scaled large enough but who does not have the fidelity of vision to discern the details of a photograph, chart, map, illustration, or other visual material. Certain browsers might render the contents of the `alt` attribute when an image is hovered over with a mouse pointer, but that’s no help to people using touchscreen devices, which are incapable of detecting the hover state of someone’s finger.
 
-3. **Length**: certain browsers render only the first 100 or so characters of an `alt` attribute, particularly in tool-tip text shown to users upon hovering mouse pointers over images. In testing on the most recent version of Safari on iOS and OS X (9.1), I found that `alt` text will not be displayed in place of a broken image if the text runs longer than one line within the broken image’s dimensions as specified in HTML or CSS. Keeping `alt` text accessible means keeping it short, with *short* being an arbitrary descriptor even in modern browsers like Safari. Of course, the shorter `alt` text is, the less descriptive it can be.
+3. **Length**: certain browsers render only the first 100 or so characters of an `alt` attribute, particularly in tool-tip text shown to users upon hovering mouse pointers over images. In testing on the most recent version of Safari on iOS and OS X (9.1), I found that `alt` text will not be displayed in place of a broken image if the text runs longer than one line within the broken image’s dimensions as specified in HTML or CSS, [as this example shows](https://karlstolley.github.io/drc-accessible-images/part-i/alt-broken-image.html) if accessed using Safari. Keeping `alt` text accessible means keeping it short, with *short* being an arbitrary descriptor even in modern browsers like Safari. Of course, the shorter `alt` text is, the less descriptive it can be.
 
 Prior to HTML5, the `<img>` element had a long-description attribute (`longdesc`), which posed even more discoverability problems than `alt`, as not even an error condition revealed its presence. It was also frequently misused: HTML authors would stuff even more plain-text descriptive content into the `longdesc` attribute, instead of a URL pointing to the location of the descriptive content, as called for by the specification. For those reasons, `longdesc` is [obsolete in HTML5](http://www.w3.org/TR/html-markup/img.html), which now directs HTML authors simply to provide a link to any descriptive content via a vanilla anchor tag (`<a>`).
 
@@ -118,8 +118,10 @@ I’ve added the following CSS to highlight the descriptive content on the page,
 
     /* CSS */
     #garden-photo-description:target {
-      background: #DDD;
-      transition: background 1s;
+      background: rgb(182,219,255);
+      transition: background 2s;
     }
 
 The CSS `transition` property provides a subtle, one-second animation to fade in the background color, potentially giving users time to notice the change on the page as it happens.
+
+
