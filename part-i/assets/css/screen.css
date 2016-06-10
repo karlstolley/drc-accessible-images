@@ -54,7 +54,6 @@ img {
 }
 
 /* Background color & transition on targeted elements */
-
 #garden-photo:target,
 #garden-photo-description:target {
   background: rgb(182,219,255);
