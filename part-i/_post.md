@@ -87,7 +87,7 @@ It’s not hard to imagine that a full description of an image would naturally a
       his tongue... <!-- ...and so on -->
     </p>
 
-This has become a very strong piece of markup compared to the initial bare-bones `<div>` example introduced above. And note that it is entirely HTML: no fancy JavaScript or anything is required to make all of this work. It’s an instructive example of the importance of careful treatment and ongoing study of HTML and its evolution beyond the humble, limited `alt` attribute.
+This has become a very strong piece of markup compared to the initial bare-bones `<div>` example introduced above. And note that it is entirely HTML: no fancy JavaScript or anything is required to make all of this work. It’s an instructive example of the importance of careful treatment and ongoing study of HTML and its evolution beyond the humble, limited `alt` attribute. I’ve prepared a [live example](https://karlstolley.github.io/drc-accessible-images/part-i/hank.html) of this, the styling of which I’ll described next.
 
 ## Foundational Styling for Older Browsers and Newer Semantics
 
@@ -122,6 +122,6 @@ I’ve added the following CSS to highlight the descriptive content on the page,
       transition: background 2s;
     }
 
-The CSS `transition` property provides a subtle, one-second animation to fade in the background color, potentially giving users time to notice the change on the page as it happens.
+The CSS `transition` property provides a subtle, one-second animation to fade in the background color, potentially giving users time to notice the change on the page as it happens. Again, you can examine the [live example](https://karlstolley.github.io/drc-accessible-images/part-i/hank.html) showing all of this in action. Its source code is also available [on GitHub](https://github.com/karlstolley/drc-accessible-images/tree/gh-pages/part-i). The next post will look more closely at the accessibility of images themselves, moving beyond the very basic layout from this example to include responsive design and responsive images.
 
 
