@@ -37,6 +37,9 @@ Responsive web design unites three techniques: fluid grids, CSS3 media queries, 
         width: 66.667%;
         margin: 0 11.111% 0 22.222%; /* Left offset for #content area */
       }
+    /*
+      Closing bracket from the media query:
+    */
     }
 
 Media queries apply the CSS rules they contain only under certain conditions. In that example, `#content` is only sized at 66.667% if the browser viewport is 700 pixels wide or more. For a more accessible query, it’s generally better to specify em units rather than pixels. In most browsers, 1em = 16px, so the query could be rewritten as `(min-width: 43.75em)`. That has the advantage of drawing layouts based on how large someone has zoomed the text, an accessibility preference of the user, rather than the arbitrary pixel-width of their device. And pixel-widths of devices are extremely arbitrary. In the early days of RWD, designers too often used the screen sizes of the iPhone and iPad to determine the `min-width` breakpoints of a design. A much better practice is to use something like the [responsive design mode in Firefox](https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode), specifying breakpoints based solely on stress points in the design, where elements are sized incorrectly or the grid begins to fall apart.
@@ -46,7 +49,7 @@ It’s difficult to overstate how fluid grids and media queries have revolutioni
     /* CSS */
     img {
       display: block;
-      max-width: 100%; /*Image only as big as its containing element*/
+      max-width: 100%; /* Image only as big as its containing element */
     }
 
 The preparation of web images became even more complicated with the 2010 release of the iPhone 4, which introduced what Apple called a [Retina display](https://support.apple.com/en-us/HT202471). On Retina displays, or what I’ll refer to from here on as high-density displays (HDDs), the number of pixels per inch that make up the device’s screen increase from a traditional 96ppi to 192ppi and beyond. The kicker is that to prevent text, icons, and images from appearing microscopic, HDDs size on-screen elements *as though* the display were a traditional 96dpi display. And that means that a pixel is no longer a pixel.
