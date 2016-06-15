@@ -68,3 +68,21 @@ article {
 
 
 
+
+
+/* For Part II */
+
+/* Styles to show currently loaded image source */
+figure { position: relative; }
+#logger {
+  font-family: Monaco, Courier, monospace;
+  font-size: .75em;
+  padding: .6667em;
+  position: absolute;
+  right: 0;
+  color: rgb(255,255,255);
+  background-color: rgba(0,0,0,.6);
+}
+
+
+
