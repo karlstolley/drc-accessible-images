@@ -47,7 +47,7 @@ Responsive web design unites three techniques: fluid grids, CSS3 media queries, 
 
 Media queries apply the CSS rules they contain only under certain conditions. In that example, `#content` is sized at 66.667% only if the browser viewport is at least 700 pixels wide. For a more accessible query, it’s generally better to specify em units rather than pixels. In most browsers, 1em = 16px, so the query could be rewritten as `(min-width: 43.75em)`. That has the advantage of drawing layouts based on how large someone has zoomed the text, an accessibility preference of the user, rather than the arbitrary pixel-width of their device. And pixel-widths of devices are exceptionally arbitrary, as [a chart of iPhone models shows](http://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions). In the early days of RWD, designers too often used the screen sizes of the iPhone and iPad to determine the `min-width` breakpoints of a design. A much better practice is to use something like the [responsive design mode in Firefox](https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode), specifying breakpoints based solely on stress points in the design, where elements are no longer sized appropriately or the grid begins to fall apart.
 
-3. **Flexible images**. Flexible images require abandoning the `height` and `width` attributes on an image tag, and instead controlling the size of images purely through CSS:
+3. **Flexible images**. Flexible images require removing from image tags any `height` and `width` attributes and instead controlling the size of images purely through CSS:
 
     /* CSS */
     img {
@@ -55,7 +55,7 @@ Media queries apply the CSS rules they contain only under certain conditions. In
       max-width: 100%; /* Image only as big as its containing element */
     }
 
-Those two lines ensure that images are displayed as blocks, rather than inline (the default on most browsers), and that the image never exceeds the width of its containing element, such as the `<figure>` element I described in Part I.
+Those two lines of CSS ensure that images are displayed as blocks, rather than inline (the default on most browsers), and that images never exceed the width of their containing elements, such as the `<figure>` element I described in Part I.
 
 But before going any further on web design, I need to stop and point out about some significant changes to screens and their impact on the fundamental unit of computer displays and images: the pixel.
 
