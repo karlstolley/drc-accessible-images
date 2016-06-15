@@ -1,4 +1,4 @@
-# Part II: Better Accessible Images
+# Image Accessibility, Part II: Beyond src Attributes
 
 In Part I one of this series, I looked at writing semantic HTML and ARIA attributes to take image accessibility well beyond the limitations of the `alt` attribute. Presenting images with text-based descriptions and enhancements that serve all users is an essential foundation for image accessibility. That foundation must be in place before pursuing any of the techniques in this post, which looks at the `srcset` attribute and the `<picture>` tag, two new HTML features that improve the accessibility of images themselves.
 
