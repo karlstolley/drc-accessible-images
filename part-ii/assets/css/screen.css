@@ -72,7 +72,8 @@ img {
 }
 
 /* Media Queries */
-@media screen and (min-width: 600px) {
+/* 33.333em = 600px at 1em = 16px: */
+@media screen and (min-width: 37.5em) {
   figure {
     width: 50%;
     position: absolute;
@@ -84,7 +85,8 @@ img {
   }
 }
 
-@media screen and (min-width: 1050px) {
+/* 58.333em = 1050px at 1em = 16px */
+@media screen and (min-width: 65.625em) {
   figure {
     width: 66.6667%;
   }
