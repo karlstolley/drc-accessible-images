@@ -74,9 +74,17 @@ The trouble is, bitmapped images are grids of pixels, not mathematical curves. H
 
 Bitmapped images have to match the display’s hardware pixels to look crisp on high-density displays: a wallpaper on an iPhone 4 required an image file with 640 × 960 pixels (2:1). Same with old 120 × 120 reference-pixel app icons, which needed to be re-prepared as 240 × 240 hardware pixels in order to appear crisp at 120 × 120 reference-pixel rendering (2:1). Or in web design terms, an image file specified to display as `width: 200px` (or the `%` or `em` equivalent of 200 pixels) in CSS must be at least 400 pixels wide to look good on an HDD. CSS dimensions are in reference pixels. Image file dimensions are in hardware pixels. Fortunately, we’re about to look at some design techniques that should help relieve you of having to ponder those points very much.
 
-## Fixing the Problems of a Single `src`
+## Fixing the Problems of a Single `src` using `srcset`
 
-## Overcoming the Problems of Simple Scaling
+I know. That’s a lot of material to digest. But to simplify and quickly review: images on the web no longer display at a single size across all screens, and high-density displays require image files with more pixels than do standard-density displays.
+
+To refresh, [this page repeats the example from Part I](https://karlstolley.github.io/drc-accessible-images/part-ii/hank-original.html). It also uses a small bit of JavaScript to show, in the corner of the image, the name of the file that it’s accessing. Here is [the same basic example, but with a responsive design](https://karlstolley.github.io/drc-accessible-images/part-ii/hank-src.html). I recommend you look at it using Firefox and its [responsive design mode](https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode), dragging the viewport to different dimensions. Or if you’re lazy or on a non-windowed device, you can see the effect in this [YouTube video of the responsive, `src`-based example](https://www.youtube.com/watch?v=0yHJCmbNbtM).
+
+It’s not a very sophisticated design, I admit, but it goes from a single-column at smaller sizes to a two-column design, finally to a three-column design (with the image occupying two columns).
+
+
+
+## Overcoming the Problems of Simple Scaling Using `<picture>`
 
 
 
