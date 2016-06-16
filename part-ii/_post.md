@@ -78,15 +78,101 @@ Bitmapped images have to match the display’s hardware pixels to look crisp on 
 
 I know. That’s a lot of material to digest. But to simplify and quickly review: images on the web no longer display at a single size across all screens, and high-density displays require image files with more pixels than do standard-density displays.
 
-To refresh, [this page repeats the example from Part I](https://karlstolley.github.io/drc-accessible-images/part-ii/hank-original.html). It also uses a small bit of JavaScript to show, in the corner of the image, the name of the file that it’s accessing. Here is [the same basic example, but with a responsive design](https://karlstolley.github.io/drc-accessible-images/part-ii/hank-src.html). I recommend you look at it using Firefox and its [responsive design mode](https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode), dragging the viewport to different dimensions. Or if you’re lazy or on a non-windowed device, you can see the effect in this [YouTube video of the responsive, `src`-based example](https://www.youtube.com/watch?v=0yHJCmbNbtM).
+To refresh, [this page repeats the example from Part I](https://karlstolley.github.io/drc-accessible-images/part-ii/hank-original.html). It also uses a small bit of JavaScript to show, in the corner of the image, the name of the file that it’s accessing. Even in that largely non-responsive example, `srcset` could be used to specify pixel-doubled and even -tripled versions of the image for higher-density displays:
 
-It’s not a very sophisticated design, I admit, but it goes from a single-column at smaller sizes to a two-column design, finally to a three-column design (with the image occupying two columns).
+    <img srcset="hank-super-hd.jpg 3x, hank-hd.jpg 2x, hank.jpg 1x" src="hank.jpg" alt="Photo of Hank the dog." />
 
+[The Mozilla Developer Network documentation for `srcset`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset) notes that a `srcset` attribute contains a comma-separated list of image sources. Optionally, as in the example above, each source can be followed by a space and a pixel-density descriptor: `3x` for pixel-tripled, `2x` for pixel-doubled, and `1x` for standard screens. The `<img>` tag must also contain a vanilla `src` element, as the example above shows, for browsers that do not understand the `srcset` element. My preference is always to put the lowest-resolution version of the image in the `src` element, with the assumption that a less-capable browser is probably on a lower-resolution screen and possible also on a lower-bandwidth network connection.
 
+Although the pixel-density descriptors are a nice introduction to `srcset`, I find them to be of limited use unless an image is displayed at essentially the same size across all versions of the design. In responsive design, that’s rarely the case. Here is [the same example from Part I, but with a basic responsive design](https://karlstolley.github.io/drc-accessible-images/part-ii/hank-src.html). I recommend you look at it using Firefox and its [responsive design mode](https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode), dragging the viewport to different dimensions. Or if you’re lazy or on a non-windowed device, you can see the effect in this [YouTube video of the responsive, `src`-based example](https://www.youtube.com/watch?v=0yHJCmbNbtM). It’s not a very sophisticated design, I admit, but it goes from a single-column at smaller sizes to a two-column design, finally to a three-column design (with the image occupying two columns).
+
+And that example is still just using a `src` element. That’s a good place to begin when designing for responsive images. It’s important to see how the design behaves as the viewport expands and contracts.
+
+When I design responsively, I start by looking at the columns of text and finding the spots where the line length gets to be too long or too short. And I always begin by designing for a narrow, mobile-scale screen. In the design with this example, given the font size I’d chosen (18px or 1.125em), lines of a single column of text became more difficult to read when the viewport was much wider than 620 pixels. So to be a better conservative (fearing a too-long line length on some of the fallback typefaces in my CSS), I walked that back to 600 pixels, or 37.5em at a default 16px em unit. At that point, the layout splits into two equal columns, which I thought made sense given that the image is about as important as the text in the example.
+
+Stretching the viewport open further, I noticed that at around 1050 pixels, the block of text started to run significantly shorter down the column compared to the height of the image. So at that point, I dropped in another media query at 1050px/65.625em, at which point the layout would be three equal columns, with the image taking up two of the three columns.
+
+With that information in hand, I could do some very basic math to determine the sizes at which my image would display. In the single-column layout, on a traditional/non-HDD screen, the image would never be sized larger than 600 pixels. In a two-column layout, the image would be as small as 300 pixels (50% of 600 pixels), but never be larger than 525 pixels (50% of 1050px, the next break point). And in a three-column layout, the image would be as small as 700 pixels, with no theoretical upper limit, apart from that of the original image itself, 3264 pixels wide coming off my iPhone that I shot it with.
+
+So, I made a little list of image sizes that I’d need, in hardware pixels/1x. I used the raw numbers from my calculations, with the exception of the 700-pixel image from the smallest possible 3-column layout, which I increased somewhat arbitrarily to 750 pixels:
+
+     300 /  150 @2x /  100 @3x
+     600 /  300 @2x /  150 @3x
+     750 /  375 @2x /  250 @3x
+    1200 /  600 @2x /  200 @3x
+    1500 /  750 @2x /  500 @3x
+    2000 / 1000 @2x /  666 @3x
+    3264 / 1632 @2x / 1088 @3x
+
+I also noted the reference pixel sizes at 2x, with the 3x sizes largely for trivia’s sake. I’m unaware of any 3x screens outside of large phones, but 4K and 5K displays (roughly @2x) are common on desktops now.
+
+So I took that list to my image editing software, and made a set of resized images based on the 3264-pixel original of Hank. After testing a wide range of compression rates on a single mid-sized image, I then saved each file at three different compression rates: 80%, 60%, and 30% (lower numbers = higher compression). I then spot-tested each image on both a Retina iMac and a traditional/1x display. What I discovered were that the very large images (1200px and higher) could well withstand higher compression rates without any significant loss in quality, especially when displayed on a high-density display. With so many pixels in play, its much more challenging on an HDD to see the typical compression artifacts and loss of image quality typical of extreme levels of compression.
+
+Here is a list of the images I ultimately selected, along with their size both in bytes and kilobytes (with the `hank-original.jpg` image represented the bandwidth-crushing 3.4 megabyte image coming off the iPhone):
+
+    hank-300-80.jpg   /   49855 bytes /  50 Kbytes
+    hank-600-60.jpg   /  110509 bytes / 111 Kbytes
+    hank-750-60.jpg   /  161393 bytes / 161 Kbytes
+    hank-1200-30.jpg  /  153540 bytes / 154 Kbytes
+    hank-1500-30.jpg  /  223007 bytes / 223 Kbytes
+    hank-2000-30.jpg  /  354749 bytes / 355 Kbytes
+    hank-3264-30.jpg  /  767679 bytes / 768 Kbytes
+    hank-original.jpg / 3446029 bytes / 3.4 Mbytes
+
+When I name images for use with `srcset`, I prefer to include in the file name the image’s width in hardware pixels followed by the compression rate. So `hank-1500-30.jpg` represents a 1500-pixel-wide image with high, 30% compression. I chose light, 80% compression for the very smallest file. With that few pixels on a 1x device, details in the photo were quickly lost even at 60% compression, without much savings in file size. But the 600- and 750-pixel images still looked good on a standard screen at 60% compression.
+
+The one oddity you might notice in the list is between the 750- and 1200-pixel images. Thanks to higher compression, the 1200-pixel image is actually 7853 fewer bytes than the 750-pixel image. Given that savings in file size, it might seem wasteful to include the larger 750-pixel image. However, there is a good chance that the 750-pixel image will be used on a large traditional/1x display in viewports up to 1125 pixels wide. Under those circumstances, the lower compression will yield a better quality image relative to the small savings in file size. And once I started sizing files at 1200 pixels and above, those had to perform best on 2x and possibly 3x displays. Higher compression made more sense, particularly because a traditional display’s browser viewport would have to be sized at a whopping 1800 pixels wide to render a pixel-for-pixel version of the 1200-pixel wide image. Possible? Yes. Worth the additional bandwidth a low-compression, 1200-pixel-wide image would consume? No.
+
+Putting all of this into `srcset` looks like this:
+
+    <img srcset="hank-3264-30.jpg 3264w, hank-2000-30.jpg 2000w, hank-1500-30.jpg 1500w, hank-1200-30.jpg 1200w, hank-750-60.jpg 750w, hank-600-60.jpg 600w, hank-300-80.jpg 300w"
+      sizes="(min-width: 1050px) 66vw, (min-width: 600px) 50vw, 100vw"
+      src="assets/img/hank-300-80.jpg"
+      alt="Photo of Hank the dog." />
+
+There’s an additional attribute there that I’ve not yet mentioned: `sizes`. When using `srcset` to do more than specify pixel densities (e.g., `2x` or `3x` in the pixel-density notation example above), the `<img>` tag requires the `sizes` attribute to give the browser clues as to how much of the viewport the image will occupy at different sizes. So this part of the source code, `sizes="(min-width: 1050px) 66vw, (min-width: 600px) 50vw, 100vw"`, translates exactly what I talked through above. `(min-width: 1050px) 66vw` means that when the viewport is at least 1050 pixels wide, the image will fill 66% of the viewport width. *Viewport width* is now a valid unit in web development, so I use it directly: `66vw`. When the screen is at least 600 pixels wide, the image will be roughly 50% of the viewport, `50vw`. Otherwise, assume the image will be 100% of the viewport, `100vw`. The browser can then use that information to select from all of the images listed in `srcset`, which are listed here with their widths, `w`, in hardware pixels. Having already included the width in my images’ file names makes writing those width units a little easier, and easier to cross-check later.
+
+One final point worth noting: the `sizes` attribute requires that each `min-width` condition and viewport size be listed from largest to smallest, because the browser will use the first `sizes` condition that matches. In keeping with that, I also list my images largest to smallest in `srcset`.
+
+You can see [the `srcset` example in action](https://karlstolley.github.io/drc-accessible-images/part-ii/hank-srcset.html) or have a look at [the YouTube video I made](https://www.youtube.com/watch?v=I62CFHkLo-M) showing different image sources loaded at different screen sizes. The exact image file is shown in a little gray box in the upper righthand corner of the image. Note that web browsers should cache and continue to use the largest image loaded even if the viewport is pulled in smaller, but the piece of JavaScript I’ve used to display the currently loaded image file prevents that behavior in the examples included here.
 
 ## Overcoming the Problems of Simple Scaling Using `<picture>`
 
+`srcset` goes a long way for handling bandwidth challenges for image accessibility. That might be a little hard to see on a single page with a single image, but over a site with many pages, with many images on each page, that savings in bandwidth adds up quickly for both users and whomever pays the bills for the website being accessed.
 
+But taking a critical eye to the image across the responsive design, it’s clear that the essential content of the image—Hank the dog, particularly his face—is difficult to discern except at very large screen sizes or when the image is nearly the full size of the viewport.
+
+At mobile sizes, the image looks *dinky*, to use the technical term I teach my students. The way the image was composed when I shot it, Hank himself occupies only the center third or so of the image. That’s fine when the full image is displayed closer to the 3264 pixels of the original image. But on small viewports, Hank’s face is too small to make out much detail.
+
+Additionally, in the jump from a 599-pixel-wide viewport to a 600-pixel wide viewport, the image goes from being displayed the entire width of the browser to just half. That layout made sense in deference to the column of text, but the image again looks dinky. And while the landscape, 4:3 ratio of the image holds up fine in the single- and three-column layouts, the narrow range of displays for the 2-column design would probably look much better with an image that was in portrait orientation.
+
+But to achieve that, we can’t use `srcset` alone. That’s why the `<picture>` element was created. `<picture>`, like the HTML5 `<audio>` and `<video>` elements, can take one or more `<source>` elements, themelves with `srcset` and `sizes` attributes, to provide the kind of art direction called for when an image might be cropped or presented in different orientations, depending on the layout. I went back into my image editor and made two new sets of images, one with a landscape crop of Hank’s face, and another crop that was in portrait orientation. My goal was to have Hank’s face be roughly the same apparent size across all images in all different configurations of the layout. Like before, I will just dump the source code from this example and walk through it:
+
+  <picture>
+    <source srcset="hank-3264-30.jpg 3264w, hank-2000-30.jpg 2000w, hank-1500-30.jpg 1500w, hank-1200-30.jpg 1200w, hank-750-60.jpg 700w" sizes="66vw" media="(min-width: 1050px)" />
+    <source srcset="hank-cropped-1200-30.jpg 1200w, hank-cropped-750-60.jpg 750w" sizes="50vw" media="(min-width: 975px)" />
+    <source srcset="hank-tall-cropped-1050-30.jpg 1050w, hank-tall-cropped-525-60.jpg 525w" sizes="50vw" media="(min-width: 600px)" />
+    <source srcset="hank-cropped-1200-30.jpg 1200w, hank-cropped-750-60.jpg 750w, hank-cropped-600-60.jpg 600w, hank-cropped-300-80.jpg 300w" sizes="100vw" />
+    <img id="hank-photo" src="hank-cropped-300-80.jpg" alt="Photo of Hank the dog." />
+  </picture>
+
+Let’s work from the bottom up. The last line before the closing `</picture>` tag is a plain old `<img>` tag with a plain old `src` element. Again, this is to help browsers that do not natively understand all of the newer elements and attributes. The line above that is a `<source>` tag. It has a `srcset` attribute listing files called `hank-cropped` with some pixel and compression value, as is my naming style. Finally, there is a sizes attribute again, specifying `100vw`. All of the images in that `srcset` on that `<source>` tag will be displayed the full width of the screen.
+
+The line above that lists another `<source>` tag with a `srcset` full of images called `hank-tall-cropped`, also with more size and compression information in the file name. It also has a `sizes` attribute, in addition to a `media` attribute. What `<source>` does is separate the media query from the size, as in the `srcset`/`sizes` attribute on the `<img>` tag. That allows web designers to present a completely different set of images for browsers to choose from at different screen sizes, something `srcset` is incapable of doing on the `<img>` tag directly.
+
+As with the `srcset` example, each `<source>` element is listed from largest to smallest, in media-query order. Browsers will use the first source that matches the current conditions of the screen. The first `<source>` is almost identical to the `srcset` example in the previous section. But notice the second source, which has a media query of `(min-width: 975px)`. There is no breakpoint like that in my CSS for the layout. But I noticed that, for the narrow range between 975 pixels to 1049 pixels, the *cropped* version of the photo of Hank, as presented to mobile users, also worked very well for the larger sizes of the two-column layout. So I wrote an additional `<source>` element that would deliver exactly that. You can [view the live example](https://karlstolley.github.io/drc-accessible-images/part-ii/hank-picture.html), or check out [the video of the example on YouTube](https://www.youtube.com/watch?v=t5C0Nb4fCFc).
+
+## Picturefill.js
+
+Both `srcset` and `<picture>` are very new technologies, and there are many browsers still in circulation that do not yet natively support them. That is why it’s essential to leave a fallback `<img>` element inside of `<picture>`, and a plain `src` attribute on `<img>` tags that use `srcset`. However, for users of browsers that do not support the new image technologies natively but that do have JavaScript enabled, Scott Jehl created a polyfill called [Picturefill](http://scottjehl.github.io/picturefill/). All that is required is to download a copy of `picturefill.js` and post it to your own site, and include a reference to it in a `<script>` tag inside your page’s `<head>` tag. Here it is presented just below the HTML5 Shiv script that I recommended in Part I:
+
+  <head>
+    <!-- Other elements removed for brevity -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <script src="assets/js/picturefill.js"></script>
+  </head>
 
 
 
