@@ -23,46 +23,43 @@
   <li>
     <p><a href="http://www.w3.org/TR/css3-mediaqueries/"><strong>Media queries</strong></a>, <a href="http://www.w3.org/Style/CSS/specs.en.html">specified in as a module for CSS3</a>, provide the means for browsers to apply specific CSS styles only under certain conditions, such as a minimum size of the browser’s viewport. Media queries are therefore perfect for adjusting the percentage-widths of fluid grids at different screen sizes. For example:</p>
 
-    <pre><code> /* CSS */
- /*
-   Content area sized at 95% at mobile scales, outside
-   of any media query:
- */
- #content {
-   width: 95%;
-   margin: 0 auto; /* Visually center #content area */
- }
- /*
-   Query for viewports larger than 700px wide:
- */
- @media screen and (min-width: 700px) {
-   /*
-     if the screen is 700px or larger, size content area
-     to be 66.667%:
-   */
-   #content {
-     width: 66.667%;
-     margin: 0 11.111% 0 22.222%; /* Left offset for #content area */
-   }
- /*
-   Closing bracket from the media query:
- */
- }
+    <pre><code class="language-css">/* CSS */
+/*
+  Content area sized at 95% at mobile scales, outside
+  of any media query:
+*/
+#content {
+  width: 95%;
+  margin: 0 auto; /* Visually center #content area */
+}
+/*
+  Query for viewports larger than 700px wide:
+*/
+@media screen and (min-width: 700px) {
+/*
+  if the screen is 700px or larger, size content area
+  to be 66.667%:
+*/
+#content {
+  width: 66.667%;
+  margin: 0 11.111% 0 22.222%; /* Left offset for #content area */
+}
+/*
+  Closing bracket from the media query:
+*/
+}
 </code></pre>
+
+    <p>Media queries apply the CSS rules they contain only under certain conditions. In that example, <code>#content</code> is sized at 66.667% only if the browser viewport is at least 700 pixels wide. For a more accessible query, <a href="http://zellwk.com/blog/media-query-units/">it’s generally better to specify em units rather than pixels</a>. In most browsers, 1em = 16px, so the query could be rewritten as <code>(min-width: 43.75em)</code>. That has the advantage of drawing layouts based on how large someone has zoomed the text, an accessibility preference of the user, rather than the arbitrary pixel-width of their device. And pixel-widths of devices are exceptionally arbitrary, as <a href="http://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions">a chart of iPhone models shows</a>. In the early days of RWD, designers too often used the screen sizes of the iPhone and iPad to determine the <code>min-width</code> breakpoints of a design. A much better practice is to view your design in progress using something like the <a href="https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode">responsive design mode in Firefox</a>. After observing how the design reacts to different sizes, it’s simple to specify exacting breakpoints based solely on stress points in the design, where elements are no longer sized appropriately or the grid begins to fall apart. A design will always look its best relative to itself. Forget about how big next year’s iPhone screen is.</p>
   </li>
-</ol>
-
-<p>Media queries apply the CSS rules they contain only under certain conditions. In that example, <code>#content</code> is sized at 66.667% only if the browser viewport is at least 700 pixels wide. For a more accessible query, <a href="http://zellwk.com/blog/media-query-units/">it’s generally better to specify em units rather than pixels</a>. In most browsers, 1em = 16px, so the query could be rewritten as <code>(min-width: 43.75em)</code>. That has the advantage of drawing layouts based on how large someone has zoomed the text, an accessibility preference of the user, rather than the arbitrary pixel-width of their device. And pixel-widths of devices are exceptionally arbitrary, as <a href="http://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions">a chart of iPhone models shows</a>. In the early days of RWD, designers too often used the screen sizes of the iPhone and iPad to determine the <code>min-width</code> breakpoints of a design. A much better practice is to view your design in progress using something like the <a href="https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode">responsive design mode in Firefox</a>. After observing how the design reacts to different sizes, it’s simple to specify exacting breakpoints based solely on stress points in the design, where elements are no longer sized appropriately or the grid begins to fall apart. A design will always look its best relative to itself. Forget about how big next year’s iPhone screen is.</p>
-
-<ol>
   <li>
     <p><strong>Flexible images</strong>. Flexible images require removing from image tags any <code>height</code> and <code>width</code> attributes and instead controlling the size of images purely through CSS:</p>
 
-    <pre><code> /* CSS */
- img {
-   display: block;
-   max-width: 100%; /* Image only as big as its containing element */
- }
+    <pre><code class="language-css">/* CSS */
+img {
+  display: block;
+  max-width: 100%; /* Image only as big as its containing element */
+}
 </code></pre>
   </li>
 </ol>
@@ -94,7 +91,7 @@
 
 <p>To refresh, <a href="https://karlstolley.github.io/drc-accessible-images/part-ii/hank-original.html">this page repeats the example from Part I</a>. It also uses a small bit of JavaScript to show, in the corner of the image, the name of the file that it’s accessing. Even in that largely non-responsive example, <code>srcset</code> could be used to specify pixel-doubled and even -tripled versions of the image for higher-density displays:</p>
 
-<pre><code>&lt;img srcset="hank-super-hd.jpg 3x, hank-hd.jpg 2x, hank.jpg 1x"
+<pre><code class="language-markup">&lt;img srcset="hank-super-hd.jpg 3x, hank-hd.jpg 2x, hank.jpg 1x"
   src="hank.jpg"
   alt="Photo of Hank the dog." /&gt;
 </code></pre>
@@ -144,7 +141,7 @@ hank-original.jpg / 3446029 bytes / 3.4 Mbytes
 
 <p>Putting all of those files into the <code>srcset</code> attribute looks like this:</p>
 
-<pre><code>&lt;img srcset="hank-3264-30.jpg 3264w, hank-2000-30.jpg 2000w, hank-1500-30.jpg 1500w, hank-1200-30.jpg 1200w, hank-750-60.jpg 750w, hank-600-60.jpg 600w, hank-300-80.jpg 300w"
+<pre><code class="language-markup">&lt;img srcset="hank-3264-30.jpg 3264w, hank-2000-30.jpg 2000w, hank-1500-30.jpg 1500w, hank-1200-30.jpg 1200w, hank-750-60.jpg 750w, hank-600-60.jpg 600w, hank-300-80.jpg 300w"
   sizes="(min-width: 1050px) 66vw, (min-width: 600px) 50vw, 100vw"
   src="assets/img/hank-300-80.jpg"
   alt="Photo of Hank the dog." /&gt;
@@ -170,7 +167,7 @@ hank-original.jpg / 3446029 bytes / 3.4 Mbytes
 
 <p>But to achieve that, we can’t use <code>srcset</code> alone. That’s why <a href="https://html.spec.whatwg.org/multipage/embedded-content.html#the-picture-element">the <code>&lt;picture&gt;</code> element was created</a>, in large measure from advocacy by the <a href="https://responsiveimages.org">Responsive Images Community Group</a>. <code>&lt;picture&gt;</code>, like the HTML5 <a href="http://w3c.github.io/html/semantics-embedded-content.html#the-audio-element"><code>&lt;audio&gt;</code></a> and <a href="http://w3c.github.io/html/semantics-embedded-content.html#the-video-element"><code>&lt;video&gt;</code></a> elements, can contain <a href="http://w3c.github.io/html/semantics-embedded-content.html#the-source-element"><code>&lt;source&gt;</code></a> elements, themelves with <code>srcset</code> and <code>sizes</code> attributes, to provide the kind of art direction called for when an image might be cropped or presented in different orientations, depending on the layout. I went back into my image editor and made two new sets of images, <a href="https://github.com/karlstolley/drc-accessible-images/blob/gh-pages/part-ii/assets/img/hank-cropped-1200-30.jpg">one with a landscape crop of Hank’s face</a>, and <a href="https://github.com/karlstolley/drc-accessible-images/blob/gh-pages/part-ii/assets/img/hank-tall-cropped-1050-30.jpg">another crop that was in portrait orientation</a>. My goal was to have Hank’s face be roughly the same apparent size across all images in all different configurations of the layout. Like before, I will just dump the source code from this example and walk through it:</p>
 
-<pre><code>&lt;picture&gt;
+<pre><code class="language-markup">&lt;picture&gt;
   &lt;source srcset="hank-3264-30.jpg 3264w, hank-2000-30.jpg 2000w, hank-1500-30.jpg 1500w, hank-1200-30.jpg 1200w, hank-750-60.jpg 700w"
     sizes="66vw" media="(min-width: 1050px)" /&gt;
   &lt;source srcset="hank-cropped-1200-30.jpg 1200w, hank-cropped-750-60.jpg 750w"
@@ -193,7 +190,7 @@ hank-original.jpg / 3446029 bytes / 3.4 Mbytes
 
 <p>Both <code>srcset</code> and <code>&lt;picture&gt;</code> are new HTML features, and there are many browsers still in circulation that do not yet natively support them. The indispensable site <a href="http://caniuse.com/">Can I use…</a> keeps up-to-date information on the implementation of <a href="http://caniuse.com/#feat=picture"><code>&lt;picture&gt;</code></a> and <a href="http://caniuse.com/#feat=srcset"><code>srcset</code></a> in top browsers. That spotty support is why it’s essential to leave a fallback <code>&lt;img&gt;</code> element inside of <code>&lt;picture&gt;</code>, and a plain <code>src</code> attribute on <code>&lt;img&gt;</code> tags that use <code>srcset</code>. However, for users of browsers that do not support the new image technologies natively but that do have JavaScript enabled, Scott Jehl created a polyfill called <a href="http://scottjehl.github.io/picturefill/">Picturefill</a>. All that is required is to download a copy of <code>picturefill.js</code> and post it to your own site, and include a reference to it in a <code>&lt;script&gt;</code> tag inside your page’s <code>&lt;head&gt;</code> tag. Here it is presented just below the HTML5 Shiv script that I recommended in Part I:</p>
 
-<pre><code>&lt;head&gt;
+<pre><code class="language-markup">&lt;head&gt;
   &lt;!-- Other elements removed for brevity --&gt;
   &lt;!--[if lt IE 9]&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"&gt;&lt;/script&gt;
