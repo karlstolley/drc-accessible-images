@@ -1,0 +1,203 @@
+<h1 id="image-accessibility-part-ii-beyond-src-attributes">Image Accessibility, Part II: Beyond src Attributes</h1>
+
+<p>In <a href="http://www.digitalrhetoriccollaborative.org/2016/06/15/image-accessibility-part-i-beyond-alt-attributes/">Part I one of this series</a>, I looked at writing semantic HTML and ARIA attributes to take image accessibility well beyond the limitations of the <code>alt</code> attribute. Presenting images with text-based descriptions and enhancements that serve all users is an essential foundation for image accessibility. That foundation must be in place before pursuing any of the techniques in this post, which looks at the limitations of the <code>src</code> attribute for accessibly delivering images in an era of responsive web design.</p>
+
+<p>To make images themselves accessible requires delivering a crisp, high-fidelity image that best suits the device and preferences of each sighted visitor to a site, but that also does not require any more bandwidth than is absolutely necessary. The accessibility challenge is therefore to deliver the right-sized image to any given device. That is a matter of understanding how screens and browsers work when displaying images, as I describe below, and what display preferences a user might specify to determine how images are presented. While the delivery of better-accessible images is currently limited to screen conditions, a <a href="https://w3c.github.io/netinfo/">Network Information API</a> is in development that will allow users to specify how their browsers behave under certain network conditions as well. In the case of accessible images, that API should help ensure that a stunning but unnecessary image doesn’t consume someone’s mobile data plan or bring a slow internet connection grinding to a halt. The techniques presented below anticipate the network API, and may very well work without any further adjustment.</p>
+
+<p>Before diving into the new HTML elements and the limitations of the <code>src</code> attribute that they attempt to solve, I’m going to walk through some recent history and foundational technical concepts behind bitmapped images. Many things have changed, particularly the pixel, which add to the complexity of the fundamentally new approach to designing for the web known as responsive web design (RWD).</p>
+
+<h2 id="images-and-responsive-web-design">Images and Responsive Web Design</h2>
+
+<p>The preparation and delivery of web images used to be simple. Web designers typically designed fixed-width page layouts, usually around 960 pixels wide. They prepared image files of a specific height and width to fit within the fixed layout and referenced the URL or path to the file in the <code>&lt;img&gt;</code> tag’s <code>src</code> attribute. To prevent jarring shifts in page layout once an image loaded, the image’s placeholder dimensions were often specified in <code>height</code> and <code>width</code> attributes on the <code>&lt;img&gt;</code> tag. On the user side, images all rendered on desk- or laptop screens with a pixel density of roughly 96 pixels per inch. So long as an image was prepared with appropriate brightness and contrast, and not excessively compressed, it was safe to consider the image more or less accessible to sighted users (colorblindness and treatment of the image’s subject matter notwithstanding).</p>
+
+<p>Apple’s release of the iPhone in 2007 was also the birth of a viable mobile web, which had failed to develop in the era of feature phones. Apple’s approach to displaying fixed-width website layouts on the original 320 × 480 iPhone screen was arguably the most important design decision in pushing the mobile web forward. Specifically, Apple designed its mobile Safari web browser to behave as though the phone screen were 980 pixels wide: large enough to display the entire, zoomed-out contents of 960-pixel fixed-width layouts. iPhone users needed only to double-tap page elements or use a zoom gesture to fill more of the native phone viewport. Other smartphone browsers quickly followed Apple’s lead and rendered pages in a similar fashion. But in terms of image data, that meant a lot of overhead: phones with native resolutions of around 320 × 480 pixels were routinely loading images with three or more times as many pixels as their screens could actually display, devouring mobile data plans and degrading device and network performance in the process.</p>
+
+<p>With rapid, widespread adoption of smartphones came an interest in designing websites specifically for the mobile screen. Sites with large budgets responded by creating special mobile versions of their sites. But in 2010, Ethan Marcotte introduced the concept of <a href="http://alistapart.com/article/responsive-web-design">responsive web design</a>. Well executed responsive web design (RWD) enables web designers to design a site from a single CSS file that will render beautifully on all screens, from the tiniest phone to a widescreen television set and everything in between. No special mobile site or mobile URL required.</p>
+
+<p>Responsive web design unites three techniques: fluid grids, CSS3 media queries, and flexible images. Briefly:</p>
+
+<ol>
+  <li>
+    <p><strong>Fluid grids</strong> are expressed in CSS as percentages, rather than fixed pixel units, and enable text content to reflow relative to browser viewport sizes. Percentage units have been available from <a href="http://www.w3.org/TR/REC-CSS1/#percentage-units">the very first version of CSS</a>. Although long championed by accessibility advocates, percentage units are accesible in terms of text line-length only within a certain, narrow range. For example, at the size of a phone screen, a single column of text should probably be close to 100% of the viewport, <a href="https://developer.mozilla.org/en-US/docs/Glossary/Viewport">the technical term</a> for the area of a browser where page content is rendered. But on even a modest-sized laptop, text areas sized to 100% of the viewport in a maximized browser window could make for uncomfortably long lines of text for someone to read.</p>
+  </li>
+  <li>
+    <p><a href="http://www.w3.org/TR/css3-mediaqueries/"><strong>Media queries</strong></a>, <a href="http://www.w3.org/Style/CSS/specs.en.html">specified in as a module for CSS3</a>, provide the means for browsers to apply specific CSS styles only under certain conditions, such as a minimum size of the browser’s viewport. Media queries are therefore perfect for adjusting the percentage-widths of fluid grids at different screen sizes. For example:</p>
+
+    <pre><code class="language-css">/* CSS */
+/*
+  Content area sized at 95% at mobile scales, outside
+  of any media query:
+*/
+#content {
+  width: 95%;
+  margin: 0 auto; /* Visually center #content area */
+}
+/*
+  Query for viewports larger than 700px wide:
+*/
+@media screen and (min-width: 700px) {
+/*
+  if the screen is 700px or larger, size content area
+  to be 66.667%:
+*/
+#content {
+  width: 66.667%;
+  margin: 0 11.111% 0 22.222%; /* Left offset for #content area */
+}
+/*
+  Closing bracket from the media query:
+*/
+}
+</code></pre>
+
+    <p>Media queries apply the CSS rules they contain only under certain conditions. In that example, <code>#content</code> is sized at 66.667% only if the browser viewport is at least 700 pixels wide. For a more accessible query, <a href="http://zellwk.com/blog/media-query-units/">it’s generally better to specify em units rather than pixels</a>. In most browsers, 1em = 16px, so the query could be rewritten as <code>(min-width: 43.75em)</code>. That has the advantage of drawing layouts based on how large someone has zoomed the text, an accessibility preference of the user, rather than the arbitrary pixel-width of their device. And pixel-widths of devices are exceptionally arbitrary, as <a href="http://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions">a chart of iPhone models shows</a>. In the early days of RWD, designers too often used the screen sizes of the iPhone and iPad to determine the <code>min-width</code> breakpoints of a design. A much better practice is to view your design in progress using something like the <a href="https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode">responsive design mode in Firefox</a>. After observing how the design reacts to different sizes, it’s simple to specify exacting breakpoints based solely on stress points in the design, where elements are no longer sized appropriately or the grid begins to fall apart. A design will always look its best relative to itself. Forget about how big next year’s iPhone screen is.</p>
+  </li>
+  <li>
+    <p><strong>Flexible images</strong>. Flexible images require removing from image tags any <code>height</code> and <code>width</code> attributes and instead controlling the size of images purely through CSS:</p>
+
+    <pre><code class="language-css">/* CSS */
+img {
+  display: block;
+  max-width: 100%; /* Image only as big as its containing element */
+}
+</code></pre>
+
+    <p>Those two lines of CSS ensure that images are displayed as blocks, rather than inline (the default on most browsers), and that images never exceed the width of their containing elements, such as the <code>&lt;figure&gt;</code> element I described in Part I.</p>
+  </li>
+</ol>
+
+<p>Before going any further on handling images in responsive web design, I need to stop and point out some significant changes to screens and their impact on the fundamental unit of computer displays and bitmapped images: the pixel.</p>
+
+<h2 id="pixel-problems">Pixel Problems</h2>
+
+<p>The 2010 release of the iPhone 4 introduced what Apple called a <a href="https://support.apple.com/en-us/HT202471">Retina display</a>. On Retina displays, or what I’ll refer to from here on as high-density displays (HDDs), the number of pixels per inch that make up the device’s screen increase from a traditional 96ppi to 192ppi and beyond. The kicker is that to prevent text, icons, and images from appearing microscopic, HDDs size on-screen elements <em>as though</em> the display were a traditional 96dpi display. And that means that a pixel is no longer a pixel.</p>
+
+<p>There are now effectively two kinds of pixels in the world, hardware pixels and reference pixels. <a href="http://alistapart.com/article/a-pixel-identity-crisis">This post by Scott Kellum</a> has a full rundown that I will only summarize here:</p>
+
+<ul>
+  <li><strong>Hardware pixels</strong> are the old, familiar concept of the pixel: the actual dots of light on the screen of a monitor or device. A standard 96ppi 1024 × 768 monitor featured exactly 1024 pixels/dots of light across, and 768 points on the vertical. A 1024 × 768 image file would would perfectly cover the screen.</li>
+  <li><strong>Reference pixels</strong> are, in <a href="http://www.w3.org/TR/css-values/#reference-pixel">the W3C’s definition</a>, “the visual angle of one pixel on a device with a pixel density of 96dpi and a distance from the reader of an arm’s length.” Don’t try to parse that; I’ll explain. The HDD/retina display on iPhone 4 featured 640 × 960 hardware pixels. But it continued to render onscreen elements as though the display were 320 × 480. The iPhone 4 remained the same size as early iPhones, 320 × 480, but in <em>reference</em> pixels. That meant, for example, that a comfortable-to-tap 120 × 120-pixel icon on an an older iPhone would still render at an apparent 120 × 120 size on the iPhone 4, rather than rendering at 60 × 60 in hardware pixels, which would be challenging to tap precisely and comfortably.</li>
+</ul>
+
+<p>In other words, on high-density displays, multiple hardware pixels must light up in order to fill the space of one reference pixel. That’s why high-density displays look so crisp. Multiple points of light (hardware pixels) are doing the job of a single reference pixel, meaning that the jagged stair-step look of text found on lower-resolution displays is eliminated, provided that the device is rendering mathematical curves, as is the case with fonts as well as vector graphics.</p>
+
+<p>The trouble is, bitmapped images are grids of pixels, not mathematical curves. HDDs attempt to maintain the apparent, reference-pixel size of bitmapped image files. But images lacking in enough hardware pixels look like garbage on HDDs. A perfectly crisp 320 × 480 background image on an older iPhone 3GS, whose hardware and reference pixels were matched at 320 × 480 (1:1), rendered as a blurry mess on the iPhone 4 because one pixel in the image file needed to fill the space of two reference pixels (1:2) in each dimension. It was the same visual consequence of using an image editor to reduce an image to half its dimensions, then blowing it back up to its original size, and introducing some pixel smoothing to avoid the blocky pixelated look of bitmapped images that have been scaled up.</p>
+
+<p>Bitmapped images have to match the display’s hardware pixels to look crisp on high-density displays: a wallpaper on an iPhone 4 required an image file with 640 × 960 pixels (2:1). Same with old 120 × 120 reference-pixel app icons, which needed to be re-prepared as 240 × 240 hardware pixels in order to appear crisp at 120 × 120 reference-pixel rendering (2:1). Or in web design terms, an image file specified to display as <code>width: 200px</code> (or the <code>%</code> or <code>em</code> equivalent of 200 pixels) in CSS must be at least 400 pixels wide to look good on an HDD. CSS dimensions are in reference pixels. Image file dimensions are in hardware pixels.</p>
+
+<h2 id="fixing-the-problems-of-a-single-src-using-srcset">Fixing the Problems of a Single <code>src</code> using <code>srcset</code></h2>
+
+<p>I know. That’s a lot of material to digest. But to simplify and quickly review: images on the web no longer display at a single size across all screens, and high-density displays require image files with more pixels than do standard-density displays.</p>
+
+<p>To refresh, <a href="https://karlstolley.github.io/drc-accessible-images/part-ii/hank-original.html">this page repeats the example from Part I</a>. It also uses a small bit of JavaScript to show, in the corner of the image, the name of the file that it’s accessing. Even in that largely non-responsive example, <code>srcset</code> could be used to specify pixel-doubled and even -tripled versions of the image for higher-density displays:</p>
+
+<pre><code class="language-markup">&lt;img srcset="hank-super-hd.jpg 3x, hank-hd.jpg 2x, hank.jpg 1x"
+  src="hank.jpg"
+  alt="Photo of Hank the dog." /&gt;
+</code></pre>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset">The Mozilla Developer Network documentation for <code>srcset</code></a> notes that a <code>srcset</code> attribute contains a comma-separated list of image sources. Optionally, as in the example above, each source can be followed by a space and a pixel-density descriptor: <code>3x</code> for pixel-tripled, <code>2x</code> for pixel-doubled, and <code>1x</code> for standard screens. The <code>&lt;img&gt;</code> tag must also contain a vanilla <code>src</code> element, as the example above shows, for browsers that do not understand the <code>srcset</code> element. My preference is always to put the lowest-resolution version of the image in the <code>src</code> element, with the assumption that a less-capable browser is probably on a lower-resolution screen and possibly also on a lower-bandwidth network connection.</p>
+
+<p>Although the pixel-density descriptors make for a nice introduction to <code>srcset</code>, I find them to be of limited use unless an image is displayed at essentially the same size across all versions of the design. In responsive design, that’s rarely the case. Here is <a href="https://karlstolley.github.io/drc-accessible-images/part-ii/hank-src.html">the same example from Part I, but with a basic responsive design</a>. I recommend you look at it using Firefox and its <a href="https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode">responsive design mode</a>, dragging the viewport to different dimensions. Or if you’re lazy or on a non-windowed device, you can see the effect in this <a href="https://www.youtube.com/watch?v=0yHJCmbNbtM">YouTube video of the responsive, <code>src</code>-based example</a>. It’s not a very sophisticated design, I admit, but it goes from a single-column at smaller sizes to a two-column design, finally to a three-column design with the image occupying two columns.</p>
+
+<p>And that example is still just using a <code>src</code> element. That’s a good place to begin when designing for responsive images. It’s important to see how the design behaves as the viewport expands and contracts before taking on the work of preparing a set of responsive images.</p>
+
+<p>When I design responsively, I start by looking at the columns of text and finding the spots where the line length gets to be too long or too short. And I always begin by designing for a narrow, mobile-scale screen. In the design with this example, given the font size I’d chosen (18px or 1.125em), lines of a single column of text became more difficult to read when the viewport was much wider than 620 pixels. Wishing to avoid a too-long line length on some of the fallback typefaces in my CSS, I walked that back to a conservative 600 pixels, or 37.5em at a default 16px em unit. At that point, the layout splits into two equal columns, which makes sense given that the image is about as important as the text in the example.</p>
+
+<p>Stretching the viewport open further, I noticed that at around 1050 pixels, the block of text started to run significantly shorter down the column compared to the height of the image. So I dropped in <a href="https://github.com/karlstolley/drc-accessible-images/blob/gh-pages/part-ii/assets/css/screen.css#L74">another media query in my CSS</a> at 1050px/65.625em, at which point I wanted the layout to be three equal columns, with the image taking up two of the three columns.</p>
+
+<p>With that information in hand, I could do some very basic math to determine the sizes at which my image would display. In the single-column layout, on a traditional/non-HDD screen, the image would never be sized larger than 600 pixels. In a two-column layout, the image would be as small as 300 pixels (50% of 600 pixels), but never be larger than 525 pixels (50% of 1050px, the next break point). And in a three-column layout, the image would be as small as 700 pixels, with no theoretical upper limit, apart from that of the original image itself, 3264 pixels wide straight off my iPhone’s camera.</p>
+
+<p>So, I made a little list of image sizes that I’d need, in hardware pixels/1x. I used the raw numbers from my calculations, with the exception of the 700-pixel image from the smallest possible 3-column layout, which I increased somewhat arbitrarily to 750 pixels:</p>
+
+<pre><code> 300 /  150 @2x /  100 @3x
+ 600 /  300 @2x /  200 @3x
+ 750 /  375 @2x /  250 @3x
+1200 /  600 @2x /  200 @3x
+1500 /  750 @2x /  500 @3x
+2000 / 1000 @2x /  666 @3x
+3264 / 1632 @2x / 1088 @3x
+</code></pre>
+
+<p>I also noted the reference pixel sizes at 2x, with the 3x sizes largely for trivia’s sake. I’m unaware of any 3x screens on anything but large phones, but 4K and 5K displays (roughly 2x) are appearing on desktops now.</p>
+
+<p>So I took that list to my image editing software, and made a set of resized images based on the 3264-pixel original of Hank. After testing a wide range of compression rates on a single mid-sized image, I then saved each file at three different compression rates: 80%, 60%, and 30% (lower numbers = higher compression in my image editor). I then spot-tested each image on both a Retina iMac and a traditional/1x display. What I discovered were that the very large versions of the image (1200px and wider) withstood higher compression rates without any noticeable loss in quality, especially when displayed on a high-density display. HDDs make it harder to see the compression artifacts and loss of image quality typical of extreme levels of compression, with so many pixels in play.</p>
+
+<p>Here is the list of the 8 images I ultimately selected from the 21 I’d prepared for experimentation, along with their file sizes both in bytes and kilobytes, with the <code>hank-original.jpg</code> file representing the bandwidth-crushing 3.4 megabyte image coming off the iPhone:</p>
+
+<pre><code>hank-300-80.jpg   /   49855 bytes /  50 Kbytes
+hank-600-60.jpg   /  110509 bytes / 111 Kbytes
+hank-750-60.jpg   /  161393 bytes / 161 Kbytes
+hank-1200-30.jpg  /  153540 bytes / 154 Kbytes
+hank-1500-30.jpg  /  223007 bytes / 223 Kbytes
+hank-2000-30.jpg  /  354749 bytes / 355 Kbytes
+hank-3264-30.jpg  /  767679 bytes / 768 Kbytes
+hank-original.jpg / 3446029 bytes / 3.4 Mbytes
+</code></pre>
+
+<p>When I name images for use with <code>srcset</code>, I prefer to include in the file name the image’s width in hardware pixels followed by the compression rate. So <code>hank-1500-30.jpg</code> represents a 1500-pixel-wide image with high, 30% compression. I chose light, 80% compression for the very smallest file. With that few pixels on a 1x device, details in the photo were quickly lost even at 60% compression, without much savings in file size. But the 600- and 750-pixel images still looked good on a standard screen at 60% compression.</p>
+
+<p>The one oddity you might notice in the list is between the 750- and 1200-pixel images. Owing to higher compression, the 1200-pixel image is actually 7853 fewer bytes than the 750-pixel image. Given that savings in file size, it might seem wasteful to include the larger 750-pixel image file. However, there is a good chance that the 750-pixel image will be used on a large traditional/1x display in viewports up to 1125 pixels wide. Under those circumstances, the lower compression will yield a better quality image relative to the small savings in file size. And once I started compressing files at 1200 pixels wide and above, I was concerned primarily about their performance on 2x and possibly 3x displays. Higher compression made more sense, particularly because a traditional display’s browser viewport would have to be sized at a whopping 1800 pixels wide to render a pixel-for-pixel version of the 1200-pixel wide image. Possible? Yes. Worth the additional bandwidth a low-compression, 1200-pixel-wide image would consume? No.</p>
+
+<p>Putting all of those files into the <code>srcset</code> attribute looks like this:</p>
+
+<pre><code class="language-markup">&lt;img srcset="hank-3264-30.jpg 3264w, hank-2000-30.jpg 2000w, hank-1500-30.jpg 1500w, hank-1200-30.jpg 1200w, hank-750-60.jpg 750w, hank-600-60.jpg 600w, hank-300-80.jpg 300w"
+  sizes="(min-width: 1050px) 66vw, (min-width: 600px) 50vw, 100vw"
+  src="assets/img/hank-300-80.jpg"
+  alt="Photo of Hank the dog." /&gt;
+</code></pre>
+
+<p>There’s an additional attribute there that I’ve not yet mentioned: <code>sizes</code>. When using <code>srcset</code> to do more than specify pixel densities (e.g., <code>2x</code> or <code>3x</code> in the pixel-density notation example above), the <code>&lt;img&gt;</code> tag requires the <code>sizes</code> attribute to give the browser clues as to how much of the viewport the image will occupy at different sizes. So this part of the source code, <code>sizes="(min-width: 1050px) 66vw, (min-width: 600px) 50vw, 100vw"</code>, reflects the little design narrative I talked through above. <code>(min-width: 1050px) 66vw</code> means that when the viewport is at least 1050 pixels wide, the image will fill 66% of the viewport width. <a href="http://www.w3.org/TR/css3-values/#viewport-relative-lengths"><em>Viewport width</em> is now a valid unit</a> in the CSS specification, with 1vw = 1/100 of the viewport, so I use it directly: <code>66vw</code>. When the screen is at least 600 pixels wide, the image will be roughly 50% of the viewport, <code>50vw</code>. Otherwise, the browser should assume that the image will be 100% of the viewport, <code>100vw</code>. The browser can then use that information to select from all of the images listed in <code>srcset</code>, which are listed here with their widths, <code>w</code>, in hardware pixels. Having already included the width in my images’ file names makes writing those width units a little easier, and certainly <a href="https://github.com/karlstolley/drc-accessible-images/commit/e9910503132f5954ffec3579675ba4ff8ac0d2f9">easier to correct later</a> (oops).</p>
+
+<p>At present, I’m using pixel units in my <code>sizes</code> attributes, rather than the em units of my CSS’s media queries. On the browsers I’ve tested, this does not seem to negatively impact accessibility if someone zooms the text. But I think it makes more sense to keep image-related <code>min-width</code> values in pixels. In the off chance that zooming text would somehow cause a browser to choose an image smaller than needed, I’ve changed the CSS for my <code>img</code> element to use <code>width: 100%</code> instead of <code>max-width: 100%</code>. With <code>max-width: 100%</code>, a browser will stop resizing an image once it reaches its maximum reference-pixel size. <code>width: 100%</code> allows the browser to keep effectively zooming an image smaller than its parent element.</p>
+
+<p>One final point worth noting: the <code>sizes</code> attribute requires that each <code>min-width</code> condition and viewport size be listed from largest to smallest, because the browser will use the first <code>sizes</code> condition that matches. I also list my images largest to smallest in <code>srcset</code>, just to stay consistent with the largest-to-smallest order of <code>sizes</code>.</p>
+
+<p>You can see <a href="https://karlstolley.github.io/drc-accessible-images/part-ii/hank-srcset.html">the <code>srcset</code> example in action</a> or have a look at <a href="https://www.youtube.com/watch?v=I62CFHkLo-M">the YouTube video I made</a> showing different image sources loaded at different screen sizes. The exact image file is shown in a little gray box in the upper righthand corner of the image. Note that web browsers should cache and continue to use the largest image loaded even if the viewport is pulled in smaller, but the piece of JavaScript I’ve used to display the currently loaded image file prevents that behavior in the examples included here.</p>
+
+<h2 id="overcoming-the-problems-of-simple-scaling-using-picture">Overcoming the Problems of Simple Scaling Using <code>&lt;picture&gt;</code></h2>
+
+<p><code>srcset</code> goes a long way toward improving bandwidth challenges inherent in image accessibility. That might be a little hard to recognize on a single page with a single image, but over a site with many pages, with many images on each page, that savings in bandwidth adds up quickly both for users and whomever pays the bills for the website being accessed.</p>
+
+<p>But taking a critical eye to the image across the responsive design, it’s clear that the essential content of the image—Hank the dog, particularly his face—is difficult to discern except at very large screen sizes or when the image is nearly the full size of the viewport.</p>
+
+<p>At mobile sizes, the image looks <em>dinky</em>, to use the super-technical term I teach students. The way the image was composed when I shot it, Hank himself occupies only the center third or so of the image. That’s fine when the full image is displayed at sizes closer to the 3264 pixels of the original image. But on small viewports, Hank’s face is too small to make out much detail.</p>
+
+<p>Additionally, in the jump from a 599-pixel-wide viewport to a 600-pixel wide viewport, the image goes from being displayed the entire width of the browser to just half. That layout made sense in deference to the column of text, but the image again looks dinky. And while the landscape, 4:3 aspect ratio of the image holds up fine in the single- and three-column layouts, the narrow range of displays for the 2-column design would probably look much better with an image that was in portrait orientation.</p>
+
+<p>But to achieve that, we can’t use <code>srcset</code> alone. That’s why <a href="https://html.spec.whatwg.org/multipage/embedded-content.html#the-picture-element">the <code>&lt;picture&gt;</code> element was created</a>, in large measure from advocacy by the <a href="https://responsiveimages.org">Responsive Images Community Group</a>. <code>&lt;picture&gt;</code>, like the HTML5 <a href="http://w3c.github.io/html/semantics-embedded-content.html#the-audio-element"><code>&lt;audio&gt;</code></a> and <a href="http://w3c.github.io/html/semantics-embedded-content.html#the-video-element"><code>&lt;video&gt;</code></a> elements, can contain <a href="http://w3c.github.io/html/semantics-embedded-content.html#the-source-element"><code>&lt;source&gt;</code></a> elements, themelves with <code>srcset</code> and <code>sizes</code> attributes, to provide the kind of art direction called for when an image might be cropped or presented in different orientations, depending on the layout. I went back into my image editor and made two new sets of images, <a href="https://github.com/karlstolley/drc-accessible-images/blob/gh-pages/part-ii/assets/img/hank-cropped-1200-30.jpg">one with a landscape crop of Hank’s face</a>, and <a href="https://github.com/karlstolley/drc-accessible-images/blob/gh-pages/part-ii/assets/img/hank-tall-cropped-1050-30.jpg">another crop that was in portrait orientation</a>. My goal was to have Hank’s face be roughly the same apparent size across all images in all different configurations of the layout. Like before, I will just dump the source code from this example and walk through it:</p>
+
+<pre><code class="language-markup">&lt;picture&gt;
+  &lt;source srcset="hank-3264-30.jpg 3264w, hank-2000-30.jpg 2000w, hank-1500-30.jpg 1500w, hank-1200-30.jpg 1200w, hank-750-60.jpg 700w"
+    sizes="66vw" media="(min-width: 1050px)" /&gt;
+  &lt;source srcset="hank-cropped-1200-30.jpg 1200w, hank-cropped-750-60.jpg 750w"
+    sizes="50vw" media="(min-width: 975px)" /&gt;
+  &lt;source srcset="hank-tall-cropped-1050-30.jpg 1050w, hank-tall-cropped-525-60.jpg 525w"
+    sizes="50vw" media="(min-width: 600px)" /&gt;
+  &lt;source srcset="hank-cropped-1200-30.jpg 1200w, hank-cropped-750-60.jpg 750w, hank-cropped-600-60.jpg 600w, hank-cropped-300-80.jpg 300w"
+    sizes="100vw" /&gt;
+  &lt;img id="hank-photo" src="hank-cropped-300-80.jpg" alt="Photo of Hank the dog." /&gt;
+&lt;/picture&gt;
+</code></pre>
+
+<p>Let’s work from the bottom up. The last line before the closing <code>&lt;/picture&gt;</code> tag is a plain old <code>&lt;img&gt;</code> tag with a plain old <code>src</code> element. Again, this is to help browsers that do not natively understand all of the newer HTML elements and attributes. The line above that is a <code>&lt;source&gt;</code> tag. It has a <code>srcset</code> attribute listing files called <code>hank-cropped</code> with some pixel and compression value, as is my naming style. Finally, there is a sizes attribute again, specifying <code>100vw</code>. All of the images in that <code>srcset</code> on that <code>&lt;source&gt;</code> tag will be displayed the full width of the screen.</p>
+
+<p>The line above that contains another <code>&lt;source&gt;</code> tag with a <code>srcset</code> listing of images called <code>hank-tall-cropped</code>, also with more size and compression information in the file name. It also has a <code>sizes</code> attribute, in addition to a <code>media</code> attribute. What <code>&lt;source&gt;</code> does is separate the media query from the size, as in the <code>srcset</code>/<code>sizes</code> attribute on the <code>&lt;img&gt;</code> tag. That allows web designers to present a specific subset of images for browsers to choose from at specific screen sizes. That’s not possible in <code>srcset</code> used on the <code>&lt;img&gt;</code> tag directly, because any image listed in <code>srcset</code> is theoretically available for the browser to load–including in some future where the Network API is taken into account when choosing an image source.</p>
+
+<p>As with the <code>srcset</code> example, each <code>&lt;source&gt;</code> element is listed from largest to smallest, in media-query order. Browsers will use the first source that matches the current conditions of the screen. The first <code>&lt;source&gt;</code> is almost identical to the <code>srcset</code> example in the previous section. But notice the second source, which has a media query of <code>(min-width: 975px)</code>. There is no breakpoint like that in my CSS for the layout. But I decided that, for the narrow range between 975 pixels to 1049 pixels, the cropped version of the photo of Hank presented on smaller screens also worked better than the tall crop for the larger sizes of the two-column layout. So I wrote an additional <code>&lt;source&gt;</code> element that would deliver exactly that for <code>min-width: 975px</code>. You can <a href="https://karlstolley.github.io/drc-accessible-images/part-ii/hank-picture.html">view the live example</a>, or check out <a href="https://www.youtube.com/watch?v=t5C0Nb4fCFc">the video of the example on YouTube</a>. As a bonus, here is <a href="https://www.youtube.com/watch?v=cbFdHhO_clk">a video showing how the layout and <code>&lt;picture&gt;</code> element behave</a> when someone simply increases the text size in the browser. As the text gets bigger, it triggers em-based media queries to deliver layouts designed with smaller screens in mind, while loading images that are sized for the pixel dimensions of the screen.</p>
+
+<h2 id="picturefilljs">Picturefill.js</h2>
+
+<p>Both <code>srcset</code> and <code>&lt;picture&gt;</code> are new HTML features, and there are many browsers still in circulation that do not yet natively support them. The indispensable site <a href="http://caniuse.com/">Can I use…</a> keeps up-to-date information on the implementation of <a href="http://caniuse.com/#feat=picture"><code>&lt;picture&gt;</code></a> and <a href="http://caniuse.com/#feat=srcset"><code>srcset</code></a> in top browsers. That spotty support is why it’s essential to leave a fallback <code>&lt;img&gt;</code> element inside of <code>&lt;picture&gt;</code>, and a plain <code>src</code> attribute on <code>&lt;img&gt;</code> tags that use <code>srcset</code>. However, for users of browsers that do not support the new image technologies natively but that do have JavaScript enabled, Scott Jehl created a polyfill called <a href="http://scottjehl.github.io/picturefill/">Picturefill</a>. All that is required is to download a copy of <code>picturefill.js</code> and post it to your own site, and include a reference to it in a <code>&lt;script&gt;</code> tag inside your page’s <code>&lt;head&gt;</code> tag. Here it is presented just below the HTML5 Shiv script that I recommended in Part I:</p>
+
+<pre><code class="language-markup">&lt;head&gt;
+  &lt;!-- Other elements removed for brevity --&gt;
+  &lt;!--[if lt IE 9]&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"&gt;&lt;/script&gt;
+  &lt;![endif]--&gt;
+  &lt;script src="assets/js/picturefill.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+</code></pre>
+
+<p>That will allow users of older, JavaScript-capable browsers to benefit from accessible, responsive images immediately.</p>
+
